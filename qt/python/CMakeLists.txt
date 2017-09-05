@@ -60,4 +60,12 @@ add_custom_command(
 # Target
 add_custom_target(mantidqt_pyc DEPENDS copy_and_compile_py_files_complete)
 
+set ( PYTHON_TEST_FILES
+  mantidqt/tests/import_test.py
+)
+
+# Tests
+pyunittest_add_test ( ${CMAKE_CURRENT_SOURCE_DIR} mantidqt ${PYTHON_TEST_FILES} )
+
+
 # Not installed yet...

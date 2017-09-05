@@ -18,7 +18,7 @@ macro ( PYUNITTEST_ADD_TEST _test_src_dir _testname_prefix )
 
   # Add all of the individual tests so that they can be run in parallel
   foreach ( part ${ARGN} )
-    get_filename_component( _filename ${part} NAME )
+    set ( _filename ${part} )
     get_filename_component( _suitename ${part} NAME_WE )
     # We duplicate the suitename so that it matches the junit output name
     set ( _pyunit_separate_name "${_testname_prefix}.${_suitename}.${_suitename}" )
@@ -29,7 +29,7 @@ macro ( PYUNITTEST_ADD_TEST _test_src_dir _testname_prefix )
                  COMMAND ${_module_dir_debug}/mantidpython.bat --classic -m testhelpers.testrunner ${_test_src_dir}/${_filename} )
       # Set the PYTHONPATH so that the built modules can be found
       set_tests_properties ( ${_pyunit_separate_name}_Debug PROPERTIES
-                             ENVIRONMENT PYTHONPATH=${PYTHON_XMLRUNNER_DIR}
+                             ENVIRONMENT PYTHONPATH=${PYTHON_XMLRUNNER_DIR};${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/Debug/lib/site-packages
                              WORKING_DIRECTORY ${_working_dir}
                              TIMEOUT ${TESTING_TIMEOUT} )
       # Release
@@ -37,7 +37,7 @@ macro ( PYUNITTEST_ADD_TEST _test_src_dir _testname_prefix )
                  COMMAND ${_module_dir}/mantidpython.bat --classic -m testhelpers.testrunner ${_test_src_dir}/${_filename} )
       # Set the PYTHONPATH so that the built modules can be found
       set_tests_properties ( ${_pyunit_separate_name} PROPERTIES
-                             ENVIRONMENT PYTHONPATH=${PYTHON_XMLRUNNER_DIR}
+                             ENVIRONMENT PYTHONPATH=${PYTHON_XMLRUNNER_DIR};${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/Release/lib/site-packages
                              WORKING_DIRECTORY ${_working_dir}
                              TIMEOUT ${TESTING_TIMEOUT} )
     else()
@@ -45,7 +45,7 @@ macro ( PYUNITTEST_ADD_TEST _test_src_dir _testname_prefix )
                  COMMAND ${_module_dir}/mantidpython --classic -m testhelpers.testrunner ${_test_src_dir}/${_filename} )
       # Set the PYTHONPATH so that the built modules can be found
       set_tests_properties ( ${_pyunit_separate_name} PROPERTIES
-                             ENVIRONMENT PYTHONPATH=${PYTHON_XMLRUNNER_DIR}
+                             ENVIRONMENT PYTHONPATH=${PYTHON_XMLRUNNER_DIR}:${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/lib/site-packages
                              WORKING_DIRECTORY ${_working_dir}
                              TIMEOUT ${TESTING_TIMEOUT} )
     endif()
