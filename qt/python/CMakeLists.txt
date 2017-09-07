@@ -1,4 +1,4 @@
-# This file manages building/installation of the   mantidqt and   mantidqtpython
+# This file manages building/installation of the mantidqt and mantidqtpython
 # Python wrappers.
 #
 
@@ -8,12 +8,14 @@ add_subdirectory ( mantidqtpython )
 # Define build location of installed files
 # In the future we should move to push all other
 # python modules to this directory
-set ( BUILD_PYTHON_MODULE_DIR
+set ( MANTIDQT_OUTPUT_DIR
       ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CMAKE_CFG_INTDIR}/lib/site-packages )
 
 # All source files
 set ( PYTHON_SOURCE_FILES
   mantidqt/__init__.py
+  mantidqt/widgets/__init__.py
+  mantidqt/widgets/common/__init__.py
   mantidqt/qtpy/QtMultimedia.py
   mantidqt/qtpy/QtOpenGL.py
   mantidqt/qtpy/__init__.py
@@ -43,12 +45,12 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} ARGS -E echo "copying mantidqt/*.py to '.../site-packages/mantidqt'"
   COMMAND ${CMAKE_COMMAND} ARGS -E copy_directory
           "${CMAKE_CURRENT_SOURCE_DIR}/mantidqt"
-          "${BUILD_PYTHON_MODULE_DIR}/mantidqt"
+          "${MANTIDQT_OUTPUT_DIR}/mantidqt"
 
   # compile
   COMMAND ${CMAKE_COMMAND} ARGS -E echo "compiling '.../site-packages/mantidqt'"
   COMMAND ${PYTHON_EXECUTABLE} -m compileall -q
-          ${BUILD_PYTHON_MODULE_DIR}/mantidqt
+          ${MANTIDQT_OUTPUT_DIR}/mantidqt
 
   # touch the marker file
   COMMAND ${CMAKE_COMMAND} ARGS -E touch "${CMAKE_CURRENT_BINARY_DIR}/copy_and_compile_py_files_complete"
@@ -58,13 +60,17 @@ add_custom_command(
 )
 
 # Target
-add_custom_target(mantidqt_pyc DEPENDS copy_and_compile_py_files_complete)
+add_custom_target(mantidqtpyc ALL DEPENDS copy_and_compile_py_files_complete)
 
-set ( PYTHON_TEST_FILES
-  mantidqt/tests/import_test.py
-)
+# Build extensions
+add_subdirectory ( mantidqt/widgets/common/sip )
 
 # Tests
+set ( PYTHON_TEST_FILES
+  mantidqt/tests/import_test.py
+  mantidqt/widgets/common/tests/desktopservices_test.py
+)
+
 pyunittest_add_test ( ${CMAKE_CURRENT_SOURCE_DIR} mantidqt ${PYTHON_TEST_FILES} )
 
 
