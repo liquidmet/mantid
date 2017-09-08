@@ -8,12 +8,14 @@
 # for a set of sip sources. The sources list should be a list of filenames
 # without a path. The .sip module is generated in the CMAKE_CURRENT_BINARY_DIR
 # keyword: MODULE_NAME The name of the final python module (without extension)
-# keyword: MODULE_OUTPUT_DIR The final destination of the built module
+# keyword: MODULE_OUTPUT_DIR The final destination of the built module optional
 # keyword: SIP_SRC_DIR The directory containing the given .sip files
 # keyword: SIP_SRCS A list of input .sip file paths
 # keyword: HEADER_DEPS A list of header files that are included
 #                      in the .sip files. These are set as dependencies on
 #                      the target.
+# keyword: INCLUDE_DIRS A list of additional target_include_directories
+# keyword: LINK_LIBS A list of additional target_link_libraries
 # keyword: PYQT_VERSION A single value indicating the version of PyQt
 #                       to compile against
 function ( mtd_add_sip_module )
@@ -25,7 +27,7 @@ function ( mtd_add_sip_module )
   set (options )
   set (oneValueArgs MODULE_NAME TARGET_NAME MODULE_OUTPUT_DIR
                     SIP_SRC_DIR PYQT_VERSION FOLDER )
-  set (multiValueArgs SIP_SRCS HEADER_DEPS LINK_LIBS)
+  set (multiValueArgs SIP_SRCS HEADER_DEPS INCLUDE_DIRS LINK_LIBS )
   cmake_parse_arguments (PARSED "${options}" "${oneValueArgs}"
                          "${multiValueArgs}" ${ARGN} )
 
@@ -55,13 +57,24 @@ function ( mtd_add_sip_module )
   
   add_library ( ${PARSED_TARGET_NAME} MODULE ${_sip_generated_cpp} )
   target_include_directories ( ${PARSED_TARGET_NAME} SYSTEM PRIVATE ${SIP_INCLUDE_DIR} )
+  target_include_directories ( ${PARSED_TARGET_NAME} PRIVATE ${PARSED_INCLUDE_DIRS} )
   target_link_libraries ( ${PARSED_TARGET_NAME} PRIVATE ${PARSED_LINK_LIBS} )
+
+  # Set all required properties on the target
   set_target_properties ( ${PARSED_TARGET_NAME} PROPERTIES
-    LIBRARY_OUTPUT_NAME ${PARSED_MODULE_NAME}
-    LIBRARY_OUTPUT_DIRECTORY ${PARSED_MODULE_OUTPUT_DIR}
-  )
+    LIBRARY_OUTPUT_NAME ${PARSED_MODULE_NAME} )
+
+  if ( PARSED_MODULE_OUTPUT_DIR )
+    set_target_properties ( ${PARSED_TARGET_NAME} PROPERTIES
+      LIBRARY_OUTPUT_DIRECTORY ${PARSED_MODULE_OUTPUT_DIR} )
+  endif ()
+
   if ( WIN32 )
     set_target_properties( ${PARSED_TARGET_NAME} PROPERTIES PREFIX "" SUFFIX ".pyd" )
+    if ( PYTHON_DEBUG_LIBRARY )
+      set_target_properties ( ${PARSED_TARGET_NAME} PROPERTIES
+        LIBRARY_OUTPUT_NAME_DEBUG ${PARSED_TARGET_NAME}_d )
+    endif ()
     if ( MSVC_IDE )
       set_target_properties( ${PARSED_TARGET_NAME} PROPERTIES FOLDER "${PARSED_FOLDER}" )
     endif ()

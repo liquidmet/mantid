@@ -1,3 +1,4 @@
+#
 # Build rules for the sip bindings of the C++ WidgetsCommon library.
 #
 include ( SipTargets )
@@ -25,7 +26,7 @@ mtd_add_sip_module (
   SIP_SRCS ${SIP_SRCS}
   HEADER_DEPS ${HEADER_DEPENDS}
   PYQT_VERSION 4
-  LINK_LIBRARIES MantidQtWidgetsCommon
+  LINK_LIBS MantidQtWidgetsCommon
   FOLDER mantidqt
 )
 
