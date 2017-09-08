@@ -60,10 +60,13 @@ add_custom_command(
 )
 
 # Target
-add_custom_target(mantidqt_pyc ALL DEPENDS copy_and_compile_py_files_complete)
+add_custom_target (mantidqt_pyc ALL DEPENDS copy_and_compile_py_files_complete)
 
 # Build extensions
 add_subdirectory ( mantidqt/widgets/common/sip )
+
+# Create a global target for all mantidqt-related builds
+add_custom_target ( mantidqt DEPENDS mantidqt_pyc mantidqt_widgets_common )
 
 # Tests
 set ( PYTHON_TEST_FILES

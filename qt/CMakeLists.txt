@@ -17,28 +17,20 @@ if ( MAKE_VATES )
 endif ( MAKE_VATES )
 
 ###########################################################################
-# Add a custom target to build all of the MantidQt packages
+# Add a custom target to build all of the Qt-related functionality
 ###########################################################################
 
+# MantidQt4 is the folder/target for all legacy functionality related to MantidPlot
+set ( MANTID_QT4_TARGETS
+  MantidQtWidgetsCommonQt4
+  MantidQtWidgetsSliceViewerQt4
+  MantidQtWidgetsSpectrumViewerQt4
+  MantidQtWidgetsRefDetectorViewQt4
+  MantidQtWidgetsFactoryQt4
+  MantidQtWidgetsPluginsAlgorithmDialogsQt4
+  mantidqtpython
+)
+add_custom_target (MantidQt4 DEPENDS ${MANTID_QT4_TARGETS})
 if ( MSVC_IDE )
-#  # Add to the 'MantidQt' group in VS
-  set_property ( TARGET MantidQtWidgetsCommonQt4 PROPERTY FOLDER "MantidQt" )
-  set_property ( TARGET MantidQtWidgetsFactoryQt4 PROPERTY FOLDER "MantidQt" )
-  set_property ( TARGET MantidQtWidgetsInstrumentViewQt4 PROPERTY FOLDER "MantidQt" )
-  set_property ( TARGET MantidQtWidgetsRefDetectorViewQt4 PROPERTY FOLDER "MantidQt" )
-  set_property ( TARGET MantidQtWidgetsSliceViewerQt4 PROPERTY FOLDER "MantidQt" )
-  set_property ( TARGET MantidQtWidgetsSpectrumViewerQt4 PROPERTY FOLDER "MantidQt" )
-  set_property ( TARGET MantidQtWidgetsPluginsDesignerQt4 PROPERTY FOLDER "MantidQt" )
-  set_property ( TARGET MantidQtWidgetsPluginsAlgorithmDialogsQt4 PROPERTY FOLDER "MantidQt" )
-  set_property ( TARGET mantidqtpython PROPERTY FOLDER "MantidQt" )
-else ()
-  add_custom_target ( MantidQt DEPENDS MantidQtWidgetsCommonQt4
-                                       MantidQtWidgetsFactoryQt4
-                                       MantidQtWidgetsInstrumentViewQt4
-                                       MantidQtWidgetsSliceViewerQt4
-                                       MantidQtWidgetsSpectrumViewerQt4
-                                       MantidQtWidgetsRefDetectorViewQt4
-                                       MantidQtWidgetsPluginsAlgorithmDialogsQt4
-                                       mantidqtpython
-  )
+  set_target_properties ( ${MANTID_QT4_TARGETS} PROPERTIES FOLDER "MantidQt4" )
 endif ()

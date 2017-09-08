@@ -24,7 +24,7 @@ function ( mtd_add_sip_module )
 
   set (options )
   set (oneValueArgs MODULE_NAME TARGET_NAME MODULE_OUTPUT_DIR
-                    SIP_SRC_DIR PYQT_VERSION )
+                    SIP_SRC_DIR PYQT_VERSION FOLDER )
   set (multiValueArgs SIP_SRCS HEADER_DEPS LINK_LIBS)
   cmake_parse_arguments (PARSED "${options}" "${oneValueArgs}"
                          "${multiValueArgs}" ${ARGN} )
@@ -62,6 +62,9 @@ function ( mtd_add_sip_module )
   )
   if ( WIN32 )
     set_target_properties( ${PARSED_TARGET_NAME} PROPERTIES PREFIX "" SUFFIX ".pyd" )
+    if ( MSVC_IDE )
+      set_target_properties( ${PARSED_TARGET_NAME} PROPERTIES FOLDER "${PARSED_FOLDER}" )
+    endif ()
   elseif ( APPLE )
     set_target_properties( ${PARSED_TARGET_NAME} PROPERTIES PREFIX "" SUFFIX ".so" )
     if (OSX_VERSION VERSION_GREATER 10.8)

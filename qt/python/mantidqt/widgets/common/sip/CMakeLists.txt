@@ -26,6 +26,7 @@ mtd_add_sip_module (
   HEADER_DEPS ${HEADER_DEPENDS}
   PYQT_VERSION 4
   LINK_LIBRARIES MantidQtWidgetsCommon
+  FOLDER mantidqt
 )
 
 
