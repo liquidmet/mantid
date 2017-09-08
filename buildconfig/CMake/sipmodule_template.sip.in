@@ -24,8 +24,5 @@
 %Import QtWidgets/QtWidgets.sip
 %End
 
-// Additional user-defined imports
-@SIP_IMPORTS_EXTRA@
-
 // Module contents
 @SIP_INCLUDES@
