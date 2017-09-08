@@ -1,8 +1,9 @@
+// It would be nice to hide these namespaces but %HideNamespace is only available in sip >= 4.19
+// For now we handle the renaming in the __init__.py of this module
 namespace MantidQt {
 namespace API {
 
-
-class MantidDesktopServices /PyName=DesktopServices/
+class MantidDesktopServices
 {
 %TypeHeaderCode
 #include "MantidQtWidgets/Common/MantidDesktopServices.h"

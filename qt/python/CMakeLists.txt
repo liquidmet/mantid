@@ -60,7 +60,7 @@ add_custom_command(
 )
 
 # Target
-add_custom_target(mantidqtpyc ALL DEPENDS copy_and_compile_py_files_complete)
+add_custom_target(mantidqt_pyc ALL DEPENDS copy_and_compile_py_files_complete)
 
 # Build extensions
 add_subdirectory ( mantidqt/widgets/common/sip )
