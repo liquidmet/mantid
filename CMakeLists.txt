@@ -13,7 +13,8 @@ set ( SYSTEM_PACKAGE_TARGET "")
 # Add the path to our custom 'find' modules
 set ( CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/buildconfig/CMake")
 
-set ( ENABLE_MANTIDPLOT ON CACHE BOOL "Switch for compiling the gui components")
+set ( ENABLE_MANTIDPLOT ON CACHE BOOL "Switch for compiling the Qt4-based MantidPlot app")
+set ( ENABLE_WORKBENCH ON CACHE BOOL "If true build the PyQt5/matplotlib-based workbench")
 
 SET (CPACK_INSTALL_CMAKE_PROJECTS
      "${CMAKE_BINARY_DIR}" "Mantid" "ALL" "/")
@@ -78,6 +79,10 @@ if (ENABLE_MANTIDPLOT)
   find_package ( Qt4 COMPONENTS QtCore QtGui QtOpenGL QtXml QtSvg REQUIRED )
 endif ()
 
+if (ENABLE_WORKBENCH)
+  find_package ( Qt5 COMPONENTS Core Widgets REQUIRED )
+endif ()
+
 ###########################################################################
 # Find OpenGL
 ###########################################################################
@@ -112,10 +117,17 @@ endif()
 # Find PyQt & sip
 ###########################################################################
 if (ENABLE_MANTIDPLOT)
-  find_package ( PyQt4 REQUIRED )
   find_package ( SIP REQUIRED )
+  find_package ( PyQt4 REQUIRED )
   separate_arguments ( PYQT4_SIP_FLAGS )
 endif()
+
+if (ENABLE_WORKBENCH)
+  find_package ( SIP REQUIRED )
+  find_package ( PyQt5 REQUIRED )
+  separate_arguments ( PYQT5_SIP_FLAGS )
+endif()
+
 
 ###########################################################################
 # gsl is currently needed by Geometry, Algorithms, Curvefitting, & MantidPlot
