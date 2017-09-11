@@ -7,13 +7,13 @@
 Compatibility functions
 """
 
-from __future__ import print_function
-import sys
+from __future__ import absolute_import, print_function
 import collections
+import sys
 
+from mantidqt.py3compat import is_text_string, string_types, to_text_string
 from . import PYQT4
 from .QtWidgets import QFileDialog
-from .py3compat import is_text_string, to_text_string, TEXT_TYPES
 
 
 # =============================================================================
@@ -47,7 +47,7 @@ if PYQT4:
         if PYQT_API_1:
             # PyQt API #1
             assert isinstance(convfunc, collections.Callable)
-            if convfunc in TEXT_TYPES or convfunc is to_text_string:
+            if convfunc in string_types or convfunc is to_text_string:
                 return convfunc(qobj.toString())
             elif convfunc is bool:
                 return qobj.toBool()
