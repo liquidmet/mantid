@@ -14,16 +14,14 @@ set ( MANTIDQT_OUTPUT_DIR
 # All source files
 set ( PYTHON_SOURCE_FILES
   mantidqt/__init__.py
+  mantidqt/py3compat.py
   mantidqt/widgets/__init__.py
-  mantidqt/widgets/common/__init__.py
   mantidqt/qtpy/QtMultimedia.py
   mantidqt/qtpy/QtOpenGL.py
   mantidqt/qtpy/__init__.py
-  mantidqt/qtpy/_version.py
   mantidqt/qtpy/QtTest.py
   mantidqt/qtpy/QtCore.py
   mantidqt/qtpy/QtNetwork.py
-  mantidqt/qtpy/py3compat.py
   mantidqt/qtpy/QtGui.py
   mantidqt/qtpy/QtDesigner.py
   mantidqt/qtpy/QtPrintSupport.py
@@ -63,15 +61,15 @@ add_custom_command(
 add_custom_target (mantidqt_pyc ALL DEPENDS copy_and_compile_py_files_complete)
 
 # Build extensions
-add_subdirectory ( mantidqt/widgets/common/sip )
+add_subdirectory ( mantidqt/widgets/sip )
 
 # Create a global target for all mantidqt-related builds
-add_custom_target ( mantidqt DEPENDS mantidqt_pyc mantidqt_widgets_common )
+add_custom_target ( mantidqt ALL DEPENDS mantidqt_pyc mantidqt_widgets_common )
 
 # Tests
 set ( PYTHON_TEST_FILES
   mantidqt/tests/import_test.py
-  mantidqt/widgets/common/tests/desktopservices_test.py
+  mantidqt/widgets/tests/desktopservices_test.py
 )
 
 pyunittest_add_test ( ${CMAKE_CURRENT_SOURCE_DIR} mantidqt ${PYTHON_TEST_FILES} )

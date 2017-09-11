@@ -13,7 +13,7 @@ set ( SIP_SRCS
 
 # The build rule must depend on the C++ header files included by the above
 # .sip files so that any change in the header causes a rebuild of the export.
-set ( COMMON_HEADER_DIR ../../../../../widgets/common/inc/MantidQtWidgets/Common )
+set ( COMMON_HEADER_DIR ../../../../widgets/common/inc/MantidQtWidgets/Common )
 set ( HEADER_DEPENDS
   ${COMMON_HEADER_DIR}/MantidDesktopServices.h
 )
@@ -21,7 +21,7 @@ set ( HEADER_DEPENDS
 mtd_add_sip_module (
   MODULE_NAME _common
   TARGET_NAME mantidqt_widgets_common
-  MODULE_OUTPUT_DIR ${MANTIDQT_OUTPUT_DIR}/mantidqt/widgets/common
+  MODULE_OUTPUT_DIR ${MANTIDQT_OUTPUT_DIR}/mantidqt/widgets
   SIP_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}
   SIP_SRCS ${SIP_SRCS}
   HEADER_DEPS ${HEADER_DEPENDS}
