@@ -15,29 +15,39 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-Defines the QMainWindow of the application and the main() entry point.
+Workbench configuration
+
 """
-from __future__ import (absolute_import, division,
-                        print_function, unicode_literals)
+from __future__ import (absolute_import, unicode_literals)
 
-from workbench.config.main import CONF
-
-# -----------------------------------------------------------------------------
-# Requirements
-# -----------------------------------------------------------------------------
-from workbench import requirements
-requirements.check_qt()
+from workbench.config.user import UserConfig
 
 # -----------------------------------------------------------------------------
-# Qt
+# Constants
 # -----------------------------------------------------------------------------
-from mantidqt.qtpy.QtCore import QCoreApplication, Qt
-from mantidqt.qtpy.QtWidgets import QApplication, QMainWindow
+ORG = 'mantidproject'
+APP = 'workbench'
+
+# Iterable containing defaults for each configurable section of the code
+# General application settings are in the main section
+DEFAULTS = [
+    ('main',
+     {
+      'high_dpi_scaling': True,
+     })
+]
 
 # -----------------------------------------------------------------------------
-# High-dpi scaling (if available). Must be set before the QApplication
-# instance is created
+# 'Singleton' instance
 # -----------------------------------------------------------------------------
-if hasattr(Qt, 'AA_EnableHighDpiScaling'):
-    QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling,
-                                  CONF.get('main', 'high_dpi_scaling'))
+# IMPORTANT NOTES:
+# 1. If you want to *change* the default value of a current option, you need to
+#    do a MINOR update in config version, e.g. from 1.0.0 to 1.1.0
+# 2. If you want to *remove* options that are no longer needed,
+#    or if you want to *rename* options, then you need to do a MAJOR update in
+#    version, e.g. from 1.0.0 to 2.0.0
+# 3. You don't need to touch this value if you're just adding a new option
+CONF_VERSION = '1.0.0'
+
+# Main instance
+CONF = UserConfig(ORG, APP, defaults=DEFAULTS, version=CONF_VERSION)

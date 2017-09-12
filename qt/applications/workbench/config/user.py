@@ -15,29 +15,25 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-Defines the QMainWindow of the application and the main() entry point.
+An informative docstring here
+
 """
-from __future__ import (absolute_import, division,
-                        print_function, unicode_literals)
 
-from workbench.config.main import CONF
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 
-# -----------------------------------------------------------------------------
-# Requirements
-# -----------------------------------------------------------------------------
-from workbench import requirements
-requirements.check_qt()
+# std lib imports
 
-# -----------------------------------------------------------------------------
-# Qt
-# -----------------------------------------------------------------------------
-from mantidqt.qtpy.QtCore import QCoreApplication, Qt
-from mantidqt.qtpy.QtWidgets import QApplication, QMainWindow
+# third-party library imports
+
+# local package imports
 
 # -----------------------------------------------------------------------------
-# High-dpi scaling (if available). Must be set before the QApplication
-# instance is created
+# Constants
 # -----------------------------------------------------------------------------
-if hasattr(Qt, 'AA_EnableHighDpiScaling'):
-    QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling,
-                                  CONF.get('main', 'high_dpi_scaling'))
+
+# -----------------------------------------------------------------------------
+# Classes
+# -----------------------------------------------------------------------------
+class UserConfig():
+    pass
