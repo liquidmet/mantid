@@ -14,26 +14,12 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""
-An informative docstring here
 
-"""
+# This file should be left very light so that importing just the package
+# is fast
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
+version_info = (0, 1, 0)
 
-# std lib imports
-
-# third-party library imports
-
-# local package imports
-
-# -----------------------------------------------------------------------------
-# Constants
-# -----------------------------------------------------------------------------
-
-# -----------------------------------------------------------------------------
-# Classes
-# -----------------------------------------------------------------------------
-class UserConfig():
-    pass
+__version__ = '.'.join(map(str, version_info))
+__license__ = 'GPLv3'
+__project_url__ = 'http://www.mantidproject.org'

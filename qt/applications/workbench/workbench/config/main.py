@@ -15,9 +15,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-Workbench configuration
+workbench.config.main
+---------------------
 
+Creates an application-wide config instance. This module is imported early
+in the startup of the mainwindow. See workbench.app.maindwindow.
 """
+
 from __future__ import (absolute_import, unicode_literals)
 
 from workbench.config.user import UserConfig
@@ -49,5 +53,6 @@ DEFAULTS = [
 # 3. You don't need to touch this value if you're just adding a new option
 CONF_VERSION = '1.0.0'
 
-# Main instance
-CONF = UserConfig(ORG, APP, defaults=DEFAULTS, version=CONF_VERSION)
+# Main instance - this object should be used across the application to
+# load/store any user setting
+CONF = UserConfig(ORG, APP, defaults=DEFAULTS)

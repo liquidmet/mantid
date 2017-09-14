@@ -14,3 +14,26 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+An informative docstring here
+
+"""
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
+# third-party library imports
+from mantidqt.qtpy.QtCore import QSettings
+
+
+# -----------------------------------------------------------------------------
+# Classes
+# -----------------------------------------------------------------------------
+class UserConfig(QSettings):
+    """
+    Specialised version of QSettings that always works with the IniFormat
+    at user scope.
+    """
+
+    def __init__(self, org, application):
+        QSettings.__init__(QSettings.IniFormat, QSettings.UserScope, org, application)
