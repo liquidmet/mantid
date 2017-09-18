@@ -14,13 +14,14 @@ using namespace CurveFitting;
 
 DECLARE_FUNCTION(Polynomial)
 
-//----------------------------------------------------------------------------------------------
 /** Constructor
  */
 Polynomial::Polynomial() : m_n(0) {}
 
-//----------------------------------------------------------------------------------------------
-/** Function to calcualte polynomial
+/** Evaluate the function at the supplied points
+ *  @param out The y-values (output)
+ *  @param xValues The points to evaluate at
+ *  @param nData The number of points
  */
 void Polynomial::function1D(double *out, const double *xValues,
                             const size_t nData) const {
@@ -42,41 +43,12 @@ void Polynomial::function1D(double *out, const double *xValues,
   }
 }
 
-//----------------------------------------------------------------------------------------------
-/** Function to calcualte polynomial based on vector
-
-void Polynomial::functionLocal(std::vector<double> &out, std::vector<double>
-xValues) const
-{
-  size_t nData = xValues.size();
-  if (out.size() > xValues.size())
-  {
-    std::stringstream errss;
-    errss << "Polynomial::functionLocal: input vector out has a larger size ("
-          << out.size() << ") than xValues's (" << nData << ").";
-    throw std::runtime_error(errss.str());
-  }
-
-  for (size_t i = 0; i < nData; ++i)
-  {
-    double x = xValues[i];
-    double temp = getParameter(0);
-    double nx = x;
-    for (int j = 1; j <= m_n; ++j)
-    {
-      temp += getParameter(j)*nx;
-      nx *= x;
-    }
-    out[i] = temp;
-  }
-
-  return;
-}
+/**
+* Evaluate the Jacobian at the supplied points.
+* @param out The Jacobian (output)
+* @param xValues The points to evaluate at
+* @param nData The number of points.
 */
-
-//----------------------------------------------------------------------------------------------
-/** Function to calculate derivative analytically
- */
 void Polynomial::functionDeriv1D(API::Jacobian *out, const double *xValues,
                                  const size_t nData) {
   for (size_t i = 0; i < nData; i++) {
@@ -89,13 +61,11 @@ void Polynomial::functionDeriv1D(API::Jacobian *out, const double *xValues,
   }
 }
 
-//----------------------------------------------------------------------------------------------
 /** Get Attribute names
  * @return A list of attribute names (identical to Polynomial)
 */
 std::vector<std::string> Polynomial::getAttributeNames() const { return {"n"}; }
 
-//----------------------------------------------------------------------------------------------
 /** Get Attribute
  * @param attName :: Attribute name. If it is not "n" exception is thrown.
  * @return a value of attribute attName
@@ -110,7 +80,6 @@ Polynomial::getAttribute(const std::string &attName) const {
   throw std::invalid_argument("Polynomial: Unknown attribute " + attName);
 }
 
-//----------------------------------------------------------------------------------------------
 /** Set Attribute
  * @param attName :: The attribute name. If it is not "n" exception is thrown.
  * @param att :: An int attribute containing the new value. The value cannot be
@@ -136,9 +105,10 @@ void Polynomial::setAttribute(const std::string &attName,
   }
 }
 
-//----------------------------------------------------------------------------------------------
-/** Check if attribute attName exists
-  */
+/** Check if function has a given attribute
+ *  @param attName The attribute name to check for
+ *  @return True if the function has that attribute
+ */
 bool Polynomial::hasAttribute(const std::string &attName) const {
   return attName == "n";
 }
