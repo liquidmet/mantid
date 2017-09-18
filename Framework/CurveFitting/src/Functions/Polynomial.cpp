@@ -6,8 +6,6 @@ using namespace Mantid::Kernel;
 
 using namespace Mantid::API;
 
-using namespace std;
-
 namespace Mantid {
 namespace CurveFitting {
 namespace Functions {
@@ -27,7 +25,7 @@ Polynomial::Polynomial() : m_n(0) {}
 void Polynomial::function1D(double *out, const double *xValues,
                             const size_t nData) const {
   // 1. Use a vector for all coefficient
-  vector<double> coeff(m_n + 1, 0.0);
+  std::vector<double> coeff(m_n + 1, 0.0);
   for (int i = 0; i < m_n + 1; ++i)
     coeff[i] = getParameter(i);
 
