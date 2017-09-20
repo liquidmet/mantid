@@ -16,6 +16,10 @@ if ( MAKE_VATES )
   add_subdirectory ( paraview_ext )
 endif ( MAKE_VATES )
 
+if(ENABLE_WORKBENCH)
+  add_subdirectory (applications/workbench)
+endif()
+
 ###########################################################################
 # Add a custom target to build all of the Qt-related functionality
 ###########################################################################

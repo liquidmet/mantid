@@ -21,6 +21,10 @@ set ( BUILD_SHARED_LIBS On )
 set ( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin )
 set ( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin )
 
+# Define a local site-packages in the binary directory
+set ( MTD_SITE_PACKAGES
+      ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CMAKE_CFG_INTDIR}/lib/site-packages )
+
 # This allows us to group targets logically in Visual Studio
 set_property ( GLOBAL PROPERTY USE_FOLDERS ON )
 

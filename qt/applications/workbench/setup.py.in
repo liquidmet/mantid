@@ -23,24 +23,27 @@ from __future__ import (absolute_import, unicode_literals)
 
 from setuptools import find_packages, setup
 
-from workbench import __license__, __project_url__, __version__
-
 # ==============================================================================
 # Metadata
 # ==============================================================================
 NAME = 'workbench'
 AUTHOR = 'mantidproject'
 EMAIL = 'mantid-help@mantidproject.org'
+LICENSE = 'GPLv3'
+URL = 'www.mantidproject.org'
+VERSION = '@VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@'
+
 
 # ==============================================================================
 # Setup
 # ==============================================================================
 setup_args = dict(
     name=NAME,
-    version=__version__,
+    version=VERSION,
+    package_dir={ '': '@CMAKE_CURRENT_SOURCE_DIR@' },
     packages=find_packages(),
-    url=__project_url__,
-    license=__license__,
+    url=URL,
+    license=LICENSE,
     author=AUTHOR,
     author_email=EMAIL,
     # Install this as a directory

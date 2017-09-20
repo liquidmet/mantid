@@ -7,12 +7,7 @@ add_subdirectory ( mantidqtpython )
 
 
 if ( ENABLE_WORKBENCH )
-  # Define build location of installed files
-  # In the future we should move to push all other
-  # python modules to this directory
-  set ( MANTIDQT_OUTPUT_DIR
-        ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CMAKE_CFG_INTDIR}/lib/site-packages )
-  
+  set ( MANTIDQT_OUTPUT_DIR ${MTD_SITE_PACKAGES}/mantidqt )
   # All source files
   set ( PYTHON_SOURCE_FILES
     mantidqt/__init__.py
@@ -45,12 +40,13 @@ if ( ENABLE_WORKBENCH )
     COMMAND ${CMAKE_COMMAND} ARGS -E echo "copying mantidqt/*.py to '.../site-packages/mantidqt'"
     COMMAND ${CMAKE_COMMAND} ARGS -E copy_directory
             "${CMAKE_CURRENT_SOURCE_DIR}/mantidqt"
-            "${MANTIDQT_OUTPUT_DIR}/mantidqt"
+            "${MANTIDQT_OUTPUT_DIR}"
   
     # compile
     COMMAND ${CMAKE_COMMAND} ARGS -E echo "compiling '.../site-packages/mantidqt'"
     COMMAND ${PYTHON_EXECUTABLE} -m compileall -q
-            ${MANTIDQT_OUTPUT_DIR}/mantidqt
+           "${MANTIDQT_OUTPUT_DIR}"
+
   
     # touch the marker file
     COMMAND ${CMAKE_COMMAND} ARGS -E touch "${CMAKE_CURRENT_BINARY_DIR}/copy_and_compile_py_files_complete"
