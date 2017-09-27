@@ -127,10 +127,9 @@ void PeriodicTableWidget::ColourUnknownProperties(
 
 void PeriodicTableWidget::enableButtonByName(QString elementStr) {
   for (auto &AllElementButton : AllElementButtons) {
-    for (auto btn_i = AllElementButton.begin(); btn_i != AllElementButton.end();
-         btn_i++) {
-      if (compareButtonNameToStr((*btn_i), elementStr)) {
-        (*btn_i)->setDisabled(false);
+    for (auto &btn_i : AllElementButton) {
+      if (compareButtonNameToStr(btn_i, elementStr)) {
+        btn_i->setDisabled(false);
       }
     }
   }
