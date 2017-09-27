@@ -27,10 +27,9 @@ TransferResults ReflLegacyTransferStrategy::transferRuns(
   std::map<std::string, std::string> thetaByDesc;
 
   // Iterate over the input and build the maps
-  for (auto rowIt = searchResults.begin(); rowIt != searchResults.end();
-       ++rowIt) {
-    const std::string run = rowIt->first;
-    const std::string desc = rowIt->second.description;
+  for (auto &searchResult : searchResults) {
+    const std::string run = searchResult.first;
+    const std::string desc = searchResult.second.description;
     std::string cleanDesc = desc;
 
     // See if theta is in the description
@@ -73,12 +72,12 @@ TransferResults ReflLegacyTransferStrategy::transferRuns(
   std::vector<std::map<std::string, std::string>>
       errors; // will remain empty for now
   TransferResults results(rows, errors);
-  for (auto run = runsByDesc.begin(); run != runsByDesc.end(); ++run) {
+  for (auto &run : runsByDesc) {
     // set up our successful run into table-ready format.
     std::map<std::string, std::string> row;
-    row[ReflTableSchema::RUNS] = run->second;
-    row[ReflTableSchema::ANGLE] = thetaByDesc[run->first];
-    row[ReflTableSchema::GROUP] = groupsByDesc[run->first];
+    row[ReflTableSchema::RUNS] = run.second;
+    row[ReflTableSchema::ANGLE] = thetaByDesc[run.first];
+    row[ReflTableSchema::GROUP] = groupsByDesc[run.first];
     // add our successful row
     results.addTransferRow(row);
   }

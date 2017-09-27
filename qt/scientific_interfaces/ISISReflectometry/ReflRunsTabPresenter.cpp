@@ -318,18 +318,16 @@ void ReflRunsTabPresenter::transfer() {
   // iterate through invalidRuns to set the 'invalid transfers' in the search
   // model
   if (!invalidRuns.empty()) { // check if we have any invalid runs
-    for (auto invalidRowIt = invalidRuns.begin();
-         invalidRowIt != invalidRuns.end(); ++invalidRowIt) {
-      auto &error = *invalidRowIt; // grab row from vector
+    for (auto &error : invalidRuns) {
+      // grab row from vector
       // iterate over row containing run number and reason why it's invalid
-      for (auto errorRowIt = error.begin(); errorRowIt != error.end();
-           ++errorRowIt) {
-        const std::string runNumber = errorRowIt->first; // grab run number
+      for (auto &errorRowIt : error) {
+        const std::string runNumber = errorRowIt.first; // grab run number
 
         // iterate over rows that are selected in the search table
-        for (auto rowIt = selectedRows.begin(); rowIt != selectedRows.end();
-             ++rowIt) {
-          const int row = *rowIt;
+        for (std::__1::__tree_const_iterator<
+                 int, std::__1::__tree_node<int, void *> *, long>::value_type
+                 row : selectedRows) {
           // get the run number from that selected row
           const auto searchRun =
               m_searchModel->data(m_searchModel->index(row, 0))

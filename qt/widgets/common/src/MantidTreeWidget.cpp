@@ -60,8 +60,8 @@ void MantidTreeWidget::dropEvent(QDropEvent *de) {
   const QMimeData *mimeData = de->mimeData();
   if (mimeData->hasUrls()) {
     QList<QUrl> urlList = mimeData->urls();
-    for (int i = 0; i < urlList.size(); ++i) {
-      QString fName = urlList[i].toLocalFile();
+    for (auto &i : urlList) {
+      QString fName = i.toLocalFile();
       if (fName.size() > 0) {
         filenames.append(fName);
       }

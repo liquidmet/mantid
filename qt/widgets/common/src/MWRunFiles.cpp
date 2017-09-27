@@ -105,8 +105,8 @@ void FindFilesThread::run() {
     else if (m_isForRunFiles) {
       m_filenames = fileSearcher.findRuns(m_text);
       m_valueForProperty = "";
-      for (auto cit = m_filenames.begin(); cit != m_filenames.end(); ++cit) {
-        m_valueForProperty += QString::fromStdString(*cit) + ",";
+      for (auto &m_filename : m_filenames) {
+        m_valueForProperty += QString::fromStdString(m_filename) + ",";
       }
       m_valueForProperty.chop(1);
     }
@@ -176,9 +176,8 @@ void FindFilesThread::getFilesFromAlgorithm() {
     std::vector<std::string> flattenedNames =
         VectorHelper::flattenVector(filenames);
 
-    for (auto filename = flattenedNames.begin();
-         filename != flattenedNames.end(); ++filename) {
-      m_filenames.push_back(*filename);
+    for (auto &flattenedName : flattenedNames) {
+      m_filenames.push_back(flattenedName);
     }
   }
 }
@@ -730,8 +729,8 @@ void MWRunFiles::findFiles() {
         QStringList runNumbers = searchText.split(",", QString::SkipEmptyParts);
         QStringList newRunNumbers;
 
-        for (auto it = runNumbers.begin(); it != runNumbers.end(); ++it)
-          newRunNumbers << m_defaultInstrumentName + (*it).simplified();
+        for (auto &runNumber : runNumbers)
+          newRunNumbers << m_defaultInstrumentName + runNumber.simplified();
 
         searchText = newRunNumbers.join(",");
       }
@@ -779,8 +778,8 @@ void MWRunFiles::inspectThreadResult() {
   m_lastFoundFiles = m_foundFiles;
   m_foundFiles.clear();
 
-  for (size_t i = 0; i < filenames.size(); ++i) {
-    m_foundFiles.append(QString::fromStdString(filenames[i]));
+  for (const auto &filename : filenames) {
+    m_foundFiles.append(QString::fromStdString(filename));
   }
   if (m_foundFiles.isEmpty() && !isOptional()) {
     setFileProblem(
@@ -834,9 +833,8 @@ QString MWRunFiles::createFileFilter() {
     } else if (isForRunFiles()) {
       std::vector<std::string> exts =
           ConfigService::Instance().getFacility().extensions();
-      for (std::vector<std::string>::iterator ex = exts.begin();
-           ex != exts.end(); ++ex) {
-        fileExts.append(QString::fromStdString(*ex));
+      for (auto &ext : exts) {
+        fileExts.append(QString::fromStdString(ext));
       }
     } else {
     }

@@ -1313,10 +1313,10 @@ void MantidMatrix::setupNewExtension(MantidMatrixModel::Type type) {
  */
 void MantidMatrix::updateExtensions(Mantid::API::MatrixWorkspace_sptr ws) {
   // Remove the tabs
-  for (auto it = m_extensions.begin(); it != m_extensions.end(); ++it) {
-    auto &extension = it->second;
+  for (auto &m_extension : m_extensions) {
+    auto &extension = m_extension.second;
     extension.model = new MantidMatrixModel(this, ws.get(), m_rows, m_cols,
-                                            m_startRow, it->first);
+                                            m_startRow, m_extension.first);
     connectTableView(extension.tableView, extension.model);
   }
 }

@@ -86,11 +86,10 @@ void IndexPeaks::exec() {
   double total_error = 0;
   double tolerance = this->getProperty("Tolerance");
 
-  for (size_t run_index = 0; run_index < run_numbers.size(); run_index++) {
+  for (int run : run_numbers) {
     std::vector<V3D> miller_indices;
     std::vector<V3D> q_vectors;
 
-    int run = run_numbers[run_index];
     for (size_t i = 0; i < n_peaks; i++) {
       if (peaks[i].getRunNumber() == run)
         q_vectors.push_back(peaks[i].getQSampleFrame());

@@ -747,8 +747,8 @@ void EnggDiffFittingPresenter::processShutDown() {
 
 void EnggDiffFittingPresenter::processLogMsg() {
   std::vector<std::string> msgs = m_view->logMsgs();
-  for (size_t i = 0; i < msgs.size(); i++) {
-    g_log.information() << msgs[i] << '\n';
+  for (const auto &msg : msgs) {
+    g_log.information() << msg << '\n';
   }
 }
 
@@ -766,10 +766,10 @@ void EnggDiffFittingPresenter::processFitAllPeaks() {
 
   if (!g_multi_run_directories.empty()) {
 
-    for (size_t i = 0; i < g_multi_run_directories.size(); i++) {
+    for (const auto &g_multi_run_directorie : g_multi_run_directories) {
       try {
 
-        inputChecksBeforeFitting(g_multi_run_directories[i], fitPeaksData);
+        inputChecksBeforeFitting(g_multi_run_directorie, fitPeaksData);
       } catch (std::invalid_argument &ia) {
         m_view->userWarning("Error in the inputs required for fitting",
                             ia.what());
@@ -1642,9 +1642,9 @@ void EnggDiffFittingPresenter::setRunNoItems(
       // enable fit button only when run number provided
       m_view->enableFitAllButton(true);
 
-      for (size_t i = 0; i < runNumVector.size(); i++) {
+      for (const auto &i : runNumVector) {
 
-        std::string currentRun = (runNumVector[i]);
+        std::string currentRun = i;
 
         // adding to widget
         m_view->addRunNoItem(currentRun);

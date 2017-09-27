@@ -128,8 +128,7 @@ void UnwrappedSurface::cacheAllAssemblies() {
   if (!m_assemblies.empty())
     return;
 
-  for (size_t i = 0; i < m_unwrappedDetectors.size(); ++i) {
-    const UnwrappedDetector &udet = m_unwrappedDetectors[i];
+  for (const auto &udet : m_unwrappedDetectors) {
     if (!udet.isValid())
       continue;
     // Get the BARE parent (not parametrized) to speed things up.
@@ -414,8 +413,7 @@ void UnwrappedSurface::getSelectedDetectors(QList<int> &dets) {
   }
 
   // select detectors with u,v within the allowed boundaries
-  for (size_t i = 0; i < m_unwrappedDetectors.size(); ++i) {
-    UnwrappedDetector &udet = m_unwrappedDetectors[i];
+  for (auto &udet : m_unwrappedDetectors) {
     if (udet.u >= uleft && udet.u <= uright && udet.v >= vbottom &&
         udet.v <= vtop) {
       dets.push_back(udet.detID);
@@ -427,8 +425,7 @@ void UnwrappedSurface::getMaskedDetectors(QList<int> &dets) const {
   dets.clear();
   if (m_maskShapes.isEmpty())
     return;
-  for (size_t i = 0; i < m_unwrappedDetectors.size(); ++i) {
-    const UnwrappedDetector &udet = m_unwrappedDetectors[i];
+  for (const auto &udet : m_unwrappedDetectors) {
     if (m_maskShapes.isMasked(udet.u, udet.v)) {
       dets.append(udet.detID);
     }
@@ -436,8 +433,7 @@ void UnwrappedSurface::getMaskedDetectors(QList<int> &dets) const {
 }
 
 void UnwrappedSurface::changeColorMap() {
-  for (size_t i = 0; i < m_unwrappedDetectors.size(); ++i) {
-    UnwrappedDetector &udet = m_unwrappedDetectors[i];
+  for (auto &udet : m_unwrappedDetectors) {
     unsigned char color[3];
     m_instrActor->getColor(udet.detID).getUB3(&color[0]);
     udet.color[0] = color[0];

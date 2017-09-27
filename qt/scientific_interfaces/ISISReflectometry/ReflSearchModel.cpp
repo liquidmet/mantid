@@ -87,21 +87,19 @@ QVariant ReflSearchModel::data(const QModelIndex &index, int role) const {
   if (role != Qt::DisplayRole) {
     if (role == Qt::ToolTipRole) {
       // setting the tool tips for any unsuccessful transfers
-      for (auto errorRow = m_errors.begin(); errorRow != m_errors.end();
-           ++errorRow) {
-        if (errorRow->find(run) != errorRow->end()) {
+      for (const auto &m_error : m_errors) {
+        if (m_error.find(run) != m_error.end()) {
           // get the error message from the unsuccessful transfer
           std::string errorMessage =
-              "Invalid transfer: " + errorRow->find(run)->second;
+              "Invalid transfer: " + m_error.find(run)->second;
           // set the message as the tooltip
           return QString::fromStdString(errorMessage);
         }
       }
     } else if (role == Qt::BackgroundRole) {
       // setting the background colour for any unsuccessful transfers
-      for (auto errorRow = m_errors.begin(); errorRow != m_errors.end();
-           ++errorRow) {
-        if (errorRow->find(run) != errorRow->end()) {
+      for (const auto &m_error : m_errors) {
+        if (m_error.find(run) != m_error.end()) {
           // return the colour yellow for any successful runs
           return QColor("#FF8040");
         }

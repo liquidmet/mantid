@@ -200,8 +200,7 @@ void MSDFit::plotFit(QString wsName, int specNo) {
     // Find the correct fit workspace and plot it
     std::stringstream searchString;
     searchString << "_" << specNo << "_Workspace";
-    for (auto it = groupWsNames.begin(); it != groupWsNames.end(); ++it) {
-      std::string wsName = *it;
+    for (auto wsName : groupWsNames) {
       if (wsName.find(searchString.str()) != std::string::npos) {
         // Get the fit workspace
         auto ws =

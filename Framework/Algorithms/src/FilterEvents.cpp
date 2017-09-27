@@ -540,8 +540,8 @@ void FilterEvents::copyNoneSplitLogs(
   std::vector<std::string> tsp_logs = getProperty("TimeSeriesPropertyLogs");
   // convert to set
   std::set<std::string> tsp_logs_set;
-  for (auto iter = tsp_logs.begin(); iter != tsp_logs.end(); ++iter)
-    tsp_logs_set.insert(*iter);
+  for (auto &tsp_log : tsp_logs)
+    tsp_logs_set.insert(tsp_log);
 
   std::set<std::string>::iterator set_iter;
   // initialize
@@ -550,9 +550,8 @@ void FilterEvents::copyNoneSplitLogs(
   bool_tsp_name_vector.clear();
 
   std::vector<Property *> prop_vector = m_eventWS->run().getProperties();
-  for (size_t i = 0; i < prop_vector.size(); ++i) {
+  for (auto prop_i : prop_vector) {
     // get property
-    Property *prop_i = prop_vector[i];
     std::string name_i = prop_i->name();
 
     // cast to different type of TimeSeriesProperties
@@ -658,21 +657,18 @@ void FilterEvents::splitTimeSeriesLogs(
     ++max_target_index;
 
   // deal with integer time series property
-  for (size_t i = 0; i < int_tsp_vector.size(); ++i) {
-    splitTimeSeriesProperty(int_tsp_vector[i], split_datetime_vec,
-                            max_target_index);
+  for (auto i : int_tsp_vector) {
+    splitTimeSeriesProperty(i, split_datetime_vec, max_target_index);
   }
 
   // split double time series property
-  for (size_t i = 0; i < dbl_tsp_vector.size(); ++i) {
-    splitTimeSeriesProperty(dbl_tsp_vector[i], split_datetime_vec,
-                            max_target_index);
+  for (auto i : dbl_tsp_vector) {
+    splitTimeSeriesProperty(i, split_datetime_vec, max_target_index);
   }
 
   // deal with bool time series property
-  for (size_t i_bool = 0; i_bool < bool_tsp_vector.size(); ++i_bool) {
-    splitTimeSeriesProperty(bool_tsp_vector[i_bool], split_datetime_vec,
-                            max_target_index);
+  for (auto i_bool : bool_tsp_vector) {
+    splitTimeSeriesProperty(i_bool, split_datetime_vec, max_target_index);
   }
 
   // integrate proton charge

@@ -403,9 +403,9 @@ void JumpFit::fitFunctionSelected(const QString &functionName) {
 
   // Add new parameter elements
   QStringList parameters = getFunctionParameters(functionName);
-  for (auto it = parameters.begin(); it != parameters.end(); ++it) {
-    QString name = "parameter_" + *it;
-    m_properties[name] = m_dblManager->addProperty(*it);
+  for (auto &parameter : parameters) {
+    QString name = "parameter_" + parameter;
+    m_properties[name] = m_dblManager->addProperty(parameter);
     m_dblManager->setValue(m_properties[name], 1.0);
     m_properties["FitFunction"]->addSubProperty(m_properties[name]);
   }
@@ -498,11 +498,11 @@ std::string JumpFit::generateFunctionName(const QString &functionName) {
 
   // Build function string
   QStringList parameters = getFunctionParameters(functionName);
-  for (auto it = parameters.begin(); it != parameters.end(); ++it) {
-    QString parameterName = *it;
+  for (auto &parameter : parameters) {
+    QString parameterName = parameter;
 
     // Get the value form double manager
-    QString name = "parameter_" + *it;
+    QString name = "parameter_" + parameter;
     double value = m_dblManager->value(m_properties[name]);
     QString parameterValue = QString::number(value);
 

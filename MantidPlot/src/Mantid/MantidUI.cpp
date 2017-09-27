@@ -452,8 +452,8 @@ QStringList MantidUI::getAlgorithmNames() {
   QStringList sl;
   std::vector<std::string> sv;
   sv = Mantid::API::AlgorithmFactory::Instance().getKeys();
-  for (size_t i = 0; i < sv.size(); i++)
-    sl << QString::fromStdString(sv[i]);
+  for (const auto &i : sv)
+    sl << QString::fromStdString(i);
   return sl;
 }
 
@@ -1600,8 +1600,8 @@ bool MantidUI::drop(QDropEvent *e) {
 /// extracts the files from a mimedata object that have a .py extension
 QStringList MantidUI::extractPyFiles(const QList<QUrl> &urlList) const {
   QStringList filenames;
-  for (int i = 0; i < urlList.size(); ++i) {
-    QString fName = urlList[i].toLocalFile();
+  for (const auto &i : urlList) {
+    QString fName = i.toLocalFile();
     if (fName.size() > 0) {
       QFileInfo fi(fName);
 
@@ -3180,15 +3180,15 @@ MultiLayer *MantidUI::plot1D(const QMultiMap<QString, int> &toPlot,
       (spectrumPlot) ? MantidMatrixCurve::Spectrum : MantidMatrixCurve::Bin;
   MantidMatrixCurve *firstCurve(NULL);
   QString logValue("");
-  for (size_t i = 0; i < curveSpecList.size(); i++) {
+  for (auto &i : curveSpecList) {
 
     if (!log.isEmpty()) { // Get log value from workspace
-      logValue = logValue.number(curveSpecList[i].logVal, 'g', 6);
+      logValue = logValue.number(i.logVal, 'g', 6);
     }
 
-    auto *wsCurve = new MantidMatrixCurve(
-        logValue, curveSpecList[i].wsName, g, curveSpecList[i].index, indexType,
-        errs, plotAsDistribution, style, multipleSpectra);
+    auto *wsCurve =
+        new MantidMatrixCurve(logValue, i.wsName, g, i.index, indexType, errs,
+                              plotAsDistribution, style, multipleSpectra);
     if (!firstCurve) {
       firstCurve = wsCurve;
       g->setNormalizable(firstCurve->isNormalizable());
@@ -3330,11 +3330,10 @@ void MantidUI::drawColorFillPlots(const QStringList &wsNames,
   int nPlots = wsNames.size();
   if (nPlots > 1) {
     QList<MultiLayer *> plots;
-    for (QStringList::const_iterator cit = wsNames.begin();
-         cit != wsNames.end(); ++cit) {
+    for (const auto &wsName : wsNames) {
       const bool hidden = true;
       MultiLayer *plot =
-          this->drawSingleColorFillPlot(*cit, curveType, NULL, hidden);
+          this->drawSingleColorFillPlot(wsName, curveType, NULL, hidden);
       if (plot)
         plots.append(plot);
     }
@@ -3362,8 +3361,8 @@ void MantidUI::drawColorFillPlots(const QStringList &wsNames,
 
       int row = 0;
       int col = 0;
-      for (auto it = plots.begin(); it != plots.end(); ++it) {
-        tiledWindow->addWidget(*it, row, col);
+      for (auto &plot : plots) {
+        tiledWindow->addWidget(plot, row, col);
         ++col;
         if (col == nCols) {
           col = 0;

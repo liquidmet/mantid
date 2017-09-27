@@ -1000,9 +1000,9 @@ InstrumentWidgetMaskTab::generateMaskWorkspaceName(bool temp) const {
   auto wsNames = Mantid::API::AnalysisDataService::Instance().getObjectNames();
   int maxIndex = 0;
   const std::string baseName = "MaskWorkspace";
-  for (auto name = wsNames.begin(); name != wsNames.end(); ++name) {
-    if (name->find(baseName) == 0) {
-      int index = Mantid::Kernel::Strings::endsWithInt(*name);
+  for (auto &wsName : wsNames) {
+    if (wsName.find(baseName) == 0) {
+      int index = Mantid::Kernel::Strings::endsWithInt(wsName);
       if (index > 0 && index > maxIndex)
         maxIndex = index;
       else
@@ -1130,13 +1130,15 @@ void InstrumentWidgetMaskTab::storeDetectorMask(bool isROI) {
 
     if (!detList.empty()) {
       // try to mask each detector separately and ignore any failure
-      for (auto det = detList.begin(); det != detList.end(); ++det) {
+      for (std::__1::__tree_const_iterator<int,
+                                           std::__1::__tree_node<int, void *> *,
+                                           long>::value_type det : detList) {
         try {
           if (isROI && wsFresh) {
-            if (wsMask->isMasked(*det))
-              wsFresh->setMasked(*det);
+            if (wsMask->isMasked(det))
+              wsFresh->setMasked(det);
           } else {
-            wsMask->setMasked(*det);
+            wsMask->setMasked(det);
           }
         } catch (...) {
         }

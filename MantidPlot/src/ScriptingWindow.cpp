@@ -478,10 +478,10 @@ void ScriptingWindow::loadFromProject(const std::string &lines,
  * @param files :: List of file names to oepn
  */
 void ScriptingWindow::loadFromFileList(const QStringList &files) {
-  for (auto file = files.begin(); file != files.end(); ++file) {
-    if (file->isEmpty())
+  for (const auto &file : files) {
+    if (file.isEmpty())
       continue;
-    openUnique(*file);
+    openUnique(file);
   }
 }
 
@@ -897,8 +897,8 @@ Script::ExecutionMode ScriptingWindow::getExecutionMode() const {
 
 QStringList ScriptingWindow::extractPyFiles(const QList<QUrl> &urlList) const {
   QStringList filenames;
-  for (int i = 0; i < urlList.size(); ++i) {
-    QString fName = urlList[i].toLocalFile();
+  for (const auto &i : urlList) {
+    QString fName = i.toLocalFile();
     if (fName.size() > 0) {
       QFileInfo fi(fName);
 

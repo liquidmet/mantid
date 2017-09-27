@@ -127,8 +127,8 @@ void PeaksWorkspaceWidget::createTableMVC() {
           SLOT(onPeaksSorted(const std::string &, const bool)));
   ui.tblPeaks->setModel(model);
   const std::vector<int> hideCols = model->defaultHideCols();
-  for (auto it = hideCols.begin(); it != hideCols.end(); ++it)
-    ui.tblPeaks->setColumnHidden(*it, true);
+  for (int hideCol : hideCols)
+    ui.tblPeaks->setColumnHidden(hideCol, true);
   ui.tblPeaks->verticalHeader()->setResizeMode(QHeaderView::Interactive);
   ui.tblPeaks->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
   m_originalTableWidth = ui.tblPeaks->horizontalHeader()->length();

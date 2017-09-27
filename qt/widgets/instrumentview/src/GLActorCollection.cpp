@@ -21,14 +21,13 @@ GLActorCollection::GLActorCollection()
 }
 
 GLActorCollection::~GLActorCollection() {
-  for (std::vector<GLActor *>::iterator i = mActorsList.begin();
-       i != mActorsList.end(); ++i) {
-    delete (*i);
+  for (auto &i : mActorsList) {
+    delete i;
   }
   mActorsList.clear();
-  for (size_t i = 0; i < 2; ++i) {
-    if (m_displayListId[i] != 0) {
-      glDeleteLists(m_displayListId[i], 1);
+  for (unsigned int i : m_displayListId) {
+    if (i != 0) {
+      glDeleteLists(i, 1);
     }
   }
 }

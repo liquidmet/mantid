@@ -575,14 +575,13 @@ bool SplatterPlotView::checkIfPeaksWorkspaceIsAlreadyBeingTracked(
           source->getProxy(),
           MantidQt::API::MdConstants::WorkspaceName.toAscii().constData())
           .GetAsString());
-  for (QList<QPointer<pqPipelineSource>>::Iterator it = m_peaksSource.begin();
-       it != m_peaksSource.end(); ++it) {
+  for (auto &it : m_peaksSource) {
     std::string trackedName(
         vtkSMPropertyHelper(
-            (*it)->getProxy(),
+            it->getProxy(),
             MantidQt::API::MdConstants::WorkspaceName.toAscii().constData())
             .GetAsString());
-    if ((*it == source) || (sourceName == trackedName)) {
+    if ((it == source) || (sourceName == trackedName)) {
       isContained = true;
       break;
     }

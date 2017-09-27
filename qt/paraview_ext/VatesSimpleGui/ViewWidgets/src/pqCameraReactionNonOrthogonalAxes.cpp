@@ -184,8 +184,8 @@ void pqCameraReactionNonOrthogonalAxes::resetDirection(
         up[j] = mat->GetElement(j, axes[1]);
       }
       vtkMath::Cross(a, up, look);
-      for (int i = 0; i < 3; ++i) {
-        look[i] *= sign;
+      for (double &i : look) {
+        i *= sign;
       }
       ren->resetViewDirection(look[0], look[1], look[2], up[0], up[1], up[2]);
     }

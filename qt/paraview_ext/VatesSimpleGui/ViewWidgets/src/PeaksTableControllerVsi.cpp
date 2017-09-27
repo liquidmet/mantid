@@ -619,16 +619,16 @@ void PeaksTableControllerVsi::setPeakSourceColorToDefault() {
       pqApplicationCore::instance()->getServerManagerModel();
   QList<pqPipelineSource *> sources =
       smModel->findItems<pqPipelineSource *>(server);
-  for (auto src = sources.begin(); src != sources.end(); ++src) {
+  for (auto &source : sources) {
 
-    std::string xmlName((*src)->getProxy()->GetXMLName());
+    std::string xmlName(source->getProxy()->GetXMLName());
     if ((xmlName.find("Peaks Source") != std::string::npos)) {
       double red = 1.0;
       double green = 1.0;
       double blue = 1.0;
 
       pqDataRepresentation *rep =
-          (*src)->getRepresentation(pqActiveObjects::instance().activeView());
+          source->getRepresentation(pqActiveObjects::instance().activeView());
       if (!rep) {
         continue;
       }

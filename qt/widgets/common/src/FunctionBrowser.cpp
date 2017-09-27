@@ -625,9 +625,9 @@ void FunctionBrowser::addAttributeAndParameterProperties(
 
   // add attribute properties
   auto attributeNames = fun->getAttributeNames();
-  for (auto att = attributeNames.begin(); att != attributeNames.end(); ++att) {
-    QString attName = QString::fromStdString(*att);
-    addAttributeProperty(prop, attName, fun->getAttribute(*att));
+  for (auto &attributeName : attributeNames) {
+    QString attName = QString::fromStdString(attributeName);
+    addAttributeProperty(prop, attName, fun->getAttribute(attributeName));
   }
 
   auto cf = boost::dynamic_pointer_cast<Mantid::API::CompositeFunction>(fun);
@@ -733,9 +733,8 @@ FunctionBrowser::AProperty FunctionBrowser::getFunctionProperty() const {
  */
 QStringList FunctionBrowser::getGlobalParameters() const {
   QStringList out;
-  for (auto propIt = m_properties.begin(); propIt != m_properties.end();
-       ++propIt) {
-    QtProperty *prop = propIt->prop;
+  for (const auto &m_propertie : m_properties) {
+    QtProperty *prop = m_propertie.prop;
     if (prop->hasOption(globalOptionName) &&
         prop->checkOption(globalOptionName)) {
       out << getIndex(prop) + prop->propertyName();
@@ -749,9 +748,8 @@ QStringList FunctionBrowser::getGlobalParameters() const {
  */
 QStringList FunctionBrowser::getLocalParameters() const {
   QStringList out;
-  for (auto propIt = m_properties.begin(); propIt != m_properties.end();
-       ++propIt) {
-    QtProperty *prop = propIt->prop;
+  for (const auto &m_propertie : m_properties) {
+    QtProperty *prop = m_propertie.prop;
     if (prop->hasOption(globalOptionName) &&
         !prop->checkOption(globalOptionName)) {
       out << getIndex(prop) + prop->propertyName();
@@ -875,9 +873,9 @@ QString FunctionBrowser::getIndex(QtProperty *prop) const {
     auto props = prop->subProperties();
     if (props.isEmpty())
       return "";
-    for (auto it = props.begin(); it != props.end(); ++it) {
-      if (isIndex(*it)) {
-        return m_indexManager->value(*it);
+    for (auto &prop : props) {
+      if (isIndex(prop)) {
+        return m_indexManager->value(prop);
       }
     }
     return "";
@@ -937,9 +935,9 @@ void FunctionBrowser::addTieProperty(QtProperty *prop, QString tie) {
   // Do parameter names include composite function index
   bool isComposite = false;
   auto vars = expr.getVariables();
-  for (auto var = vars.begin(); var != vars.end(); ++var) {
+  for (const auto &var : vars) {
     // nesting level of a particular variable
-    int n = static_cast<int>(std::count(var->begin(), var->end(), '.'));
+    int n = static_cast<int>(std::count(var.begin(), var.end(), '.'));
     if (n != 0) {
       isComposite = true;
     }

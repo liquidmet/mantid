@@ -157,9 +157,7 @@ void RotationSurface::init() {
                           // apply manually set shift
                           m_u_min = manual_u_min;
                           m_u_max = manual_u_max;
-                          for (size_t i = 0; i < m_unwrappedDetectors.size();
-                               ++i) {
-                            auto &udet = m_unwrappedDetectors[i];
+                          for (auto &udet : m_unwrappedDetectors) {
                             udet.u = applyUCorrection(udet.u);
                           }
                         }
@@ -207,8 +205,7 @@ void RotationSurface::findUVBounds() {
   m_u_max = -DBL_MAX;
   m_v_min = DBL_MAX;
   m_v_max = -DBL_MAX;
-  for (size_t i = 0; i < m_unwrappedDetectors.size(); ++i) {
-    const UnwrappedDetector &udet = m_unwrappedDetectors[i];
+  for (const auto &udet : m_unwrappedDetectors) {
     if (!udet.isValid())
       continue;
     if (udet.u < m_u_min)

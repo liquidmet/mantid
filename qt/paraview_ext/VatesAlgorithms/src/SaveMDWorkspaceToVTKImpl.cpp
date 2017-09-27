@@ -238,8 +238,8 @@ std::vector<std::string>
 SaveMDWorkspaceToVTKImpl::getAllowedNormalizationsInStringRepresentation()
     const {
   std::vector<std::string> normalizations;
-  for (auto it = m_normalizations.begin(); it != m_normalizations.end(); ++it) {
-    normalizations.push_back(it->first);
+  for (const auto &m_normalization : m_normalizations) {
+    normalizations.push_back(m_normalization.first);
   }
 
   return normalizations;

@@ -896,8 +896,8 @@ void IqtFit::singleFitComplete(bool error) {
   std::vector<std::string> parNames = outputFunc->getParameterNames();
   std::vector<double> parVals;
 
-  for (size_t i = 0; i < parNames.size(); ++i)
-    parVals.push_back(outputFunc->getParameter(parNames[i]));
+  for (const auto &parName : parNames)
+    parVals.push_back(outputFunc->getParameter(parName));
 
   for (size_t i = 0; i < parNames.size(); ++i)
     parameters[QString(parNames[i].c_str())] = parVals[i];

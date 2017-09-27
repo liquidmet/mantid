@@ -515,9 +515,7 @@ void QWorkspaceDockView::filterWorkspaces(const std::string &filterText) {
     }
 
     // make children of visible groups visible
-    for (auto itGroup = visibleGroups.begin(); itGroup != visibleGroups.end();
-         ++itGroup) {
-      QTreeWidgetItem *group = (*itGroup);
+    for (auto group : visibleGroups) {
       for (int i = 0; i < group->childCount(); i++) {
         QTreeWidgetItem *child = group->child(i);
         if (child->isHidden()) {
@@ -1337,12 +1335,12 @@ void QWorkspaceDockView::saveToProgram() {
       (Mantid::Kernel::ConfigService::Instance().getKeys(
           ("workspace.sendto." + programKeysAndDetails.find("name")->second)));
 
-  for (size_t i = 0; i < programKeys.size(); i++) {
+  for (const auto &programKey : programKeys) {
     // Assign a key to its value using the map
-    programKeysAndDetails[programKeys[i]] =
+    programKeysAndDetails[programKey] =
         (Mantid::Kernel::ConfigService::Instance().getString(
             ("workspace.sendto." + programKeysAndDetails.find("name")->second +
-             "." + programKeys[i])));
+             "." + programKey)));
   }
 
   // Check to see if mandatory information is included

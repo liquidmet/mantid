@@ -620,12 +620,12 @@ void GenericDataProcessorPresenter::postProcessGroup(
                        outputWSName);
 
   auto optionsMap = parseKeyValueString(m_postprocessingOptions.toStdString());
-  for (auto kvp = optionsMap.begin(); kvp != optionsMap.end(); ++kvp) {
+  for (auto &kvp : optionsMap) {
     try {
-      setAlgorithmProperty(alg.get(), kvp->first, kvp->second);
+      setAlgorithmProperty(alg.get(), kvp.first, kvp.second);
     } catch (Mantid::Kernel::Exception::NotFoundError &) {
       throw std::runtime_error("Invalid property in options column: " +
-                               kvp->first);
+                               kvp.first);
     }
   }
 
@@ -992,14 +992,14 @@ void GenericDataProcessorPresenter::reduceRow(RowData *data) {
 
   // Parse and set any user-specified options
   auto optionsMap = parseKeyValueString(m_processingOptions.toStdString());
-  for (auto kvp = optionsMap.begin(); kvp != optionsMap.end(); ++kvp) {
+  for (auto &kvp : optionsMap) {
     try {
-      if (restrictedProps.find(QString::fromStdString(kvp->first)) ==
+      if (restrictedProps.find(QString::fromStdString(kvp.first)) ==
           restrictedProps.end())
-        setAlgorithmProperty(alg.get(), kvp->first, kvp->second);
+        setAlgorithmProperty(alg.get(), kvp.first, kvp.second);
     } catch (Mantid::Kernel::Exception::NotFoundError &) {
       throw std::runtime_error("Invalid property in options column: " +
-                               kvp->first);
+                               kvp.first);
     }
   }
 
@@ -1008,12 +1008,12 @@ void GenericDataProcessorPresenter::reduceRow(RowData *data) {
 
   // Parse and set any user-specified options
   optionsMap = parseKeyValueString(userOptions.toStdString());
-  for (auto kvp = optionsMap.begin(); kvp != optionsMap.end(); ++kvp) {
+  for (auto &kvp : optionsMap) {
     try {
-      setAlgorithmProperty(alg.get(), kvp->first, kvp->second);
+      setAlgorithmProperty(alg.get(), kvp.first, kvp.second);
     } catch (Mantid::Kernel::Exception::NotFoundError &) {
       throw std::runtime_error("Invalid property in options column: " +
-                               kvp->first);
+                               kvp.first);
     }
   }
 
@@ -1022,13 +1022,12 @@ void GenericDataProcessorPresenter::reduceRow(RowData *data) {
 
   // Parse and set any user-specified options
   auto hiddenOptionsMap = parseKeyValueString(hiddenOptions.toStdString());
-  for (auto kvp = hiddenOptionsMap.begin(); kvp != hiddenOptionsMap.end();
-       ++kvp) {
+  for (auto &kvp : hiddenOptionsMap) {
     try {
-      alg->setProperty(kvp->first, kvp->second);
+      alg->setProperty(kvp.first, kvp.second);
     } catch (Mantid::Kernel::Exception::NotFoundError &) {
       throw std::runtime_error("Invalid property in hidden options column: " +
-                               kvp->first);
+                               kvp.first);
     }
   }
 
@@ -1567,8 +1566,8 @@ GenericDataProcessorPresenter::options() const {
 void GenericDataProcessorPresenter::setOptions(
     const std::map<QString, QVariant> &options) {
   // Overwrite the given options
-  for (auto it = options.begin(); it != options.end(); ++it)
-    m_options[it->first] = it->second;
+  for (const auto &option : options)
+    m_options[option.first] = option.second;
 
   // Save any changes to disk
   m_view->saveSettings(m_options);

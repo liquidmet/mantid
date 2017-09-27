@@ -185,10 +185,9 @@ int vtkNexusPeaksReader::CanReadFile(const char* fname)
       auto topEntryName = entries.begin()->first;
       file->openGroup(topEntryName, "NXentry");
       entries = file->getEntries();
-      for (auto it = entries.begin(); it != entries.end(); ++it)
-      {
-        if ((it->first == "peaks_workspace") && (it->second == "NXentry"))
-        {
+      for (auto &entrie : entries) {
+        if ((entrie.first == "peaks_workspace") &&
+            (entrie.second == "NXentry")) {
           file->close();
           return 1;
         }

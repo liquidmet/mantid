@@ -962,11 +962,11 @@ QtProperty *ConvFit::createFitType(const QString &propName) {
   }
   auto params = getFunctionParameters(cbName);
 
-  for (auto it = params.begin(); it != params.end(); ++it) {
-    QString paramName = propName + "." + *it;
-    m_properties[paramName] = m_dblManager->addProperty(*it);
+  for (auto &param : params) {
+    QString paramName = propName + "." + param;
+    m_properties[paramName] = m_dblManager->addProperty(param);
     m_dblManager->setDecimals(m_properties[paramName], NUM_DECIMALS);
-    if (QString(*it).compare("FWHM") == 0) {
+    if (QString(param).compare("FWHM") == 0) {
       m_dblManager->setValue(m_properties[paramName], 0.02);
     }
     fitTypeGroup->addSubProperty(m_properties[paramName]);
@@ -989,14 +989,14 @@ void ConvFit::populateFunction(IFunction_sptr func, IFunction_sptr comp,
   // object
   QList<QtProperty *> props = group->subProperties();
 
-  for (int i = 0; i < props.size(); i++) {
-    if (tie || !props[i]->subProperties().isEmpty()) {
-      std::string name = pref + props[i]->propertyName().toStdString();
-      std::string value = props[i]->valueText().toStdString();
+  for (auto &prop : props) {
+    if (tie || !prop->subProperties().isEmpty()) {
+      std::string name = pref + prop->propertyName().toStdString();
+      std::string value = prop->valueText().toStdString();
       comp->tie(name, value);
     } else {
-      std::string propName = props[i]->propertyName().toStdString();
-      double propValue = props[i]->valueText().toDouble();
+      std::string propName = prop->propertyName().toStdString();
+      double propValue = prop->valueText().toDouble();
       if (propValue != 0.0) {
         if (func->hasAttribute(propName))
           func->setAttributeValue(propName, propValue);
@@ -1835,8 +1835,8 @@ void ConvFit::addParametersToTree(const QStringList &parameters,
   const QMap<QString, double> fullPropertyMap =
       constructFullPropertyMap(m_defaultParams, parameters, currentFitFunction);
   const QStringList keys = fullPropertyMap.keys();
-  for (auto i = keys.begin(); i != keys.end(); ++i) {
-    const auto fullPropertyName = QString(*i);
+  for (const auto &key : keys) {
+    const auto fullPropertyName = QString(key);
     const auto paramName = fullPropertyName.right(
         fullPropertyName.size() - fullPropertyName.lastIndexOf(".") - 1);
     const auto propName =
@@ -1938,8 +1938,8 @@ ConvFit::constructFullPropertyMap(const QMap<QString, double> &defaultMap,
   // Lorentzians
   if (fitFunction.compare("Two Lorentzians") == 0) {
     fitFuncName = "Lorentzian 1";
-    for (auto param = parameters.begin(); param != parameters.end(); ++param) {
-      const QString qStrParam = QString(*param);
+    for (const auto &parameter : parameters) {
+      const QString qStrParam = QString(parameter);
       QString fullPropName = fitFuncName + "." + qStrParam;
       if (fullMap.contains(fullPropName)) {
         // If current property is already in the Map then it's a 2L property
@@ -1961,10 +1961,10 @@ ConvFit::constructFullPropertyMap(const QMap<QString, double> &defaultMap,
       }
     }
   } else { // All Other fit functions
-    for (auto param = parameters.begin(); param != parameters.end(); ++param) {
-      const QString fullPropName = fitFuncName + "." + QString(*param);
-      if (defaultMap.contains(QString(*param))) {
-        fullMap.insert(fullPropName, defaultMap[*param]);
+    for (const auto &parameter : parameters) {
+      const QString fullPropName = fitFuncName + "." + QString(parameter);
+      if (defaultMap.contains(QString(parameter))) {
+        fullMap.insert(fullPropName, defaultMap[parameter]);
       } else {
         // If property not in Map, assumed to default to value of 0
         fullMap.insert(fullPropName, 0);
