@@ -492,7 +492,7 @@ void Elwin::plotClicked() {
     plotSpectrum(workspaceBaseName + "_elf");
 
   if (checkADSForPlotSaveWorkspace((workspaceBaseName + "_elt").toStdString(),
-                                   true))
+                                   true, false))
     plotSpectrum(workspaceBaseName + "_elt");
 }
 
@@ -517,7 +517,7 @@ void Elwin::saveClicked() {
     addSaveWorkspaceToQueue(workspaceBaseName + "_elf");
 
   if (checkADSForPlotSaveWorkspace((workspaceBaseName + "_elt").toStdString(),
-                                   false))
+                                   false, false))
     addSaveWorkspaceToQueue(workspaceBaseName + "_elt");
 
   m_batchAlgoRunner->executeBatchAsync();
