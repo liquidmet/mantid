@@ -402,9 +402,7 @@ void QDataProcessorWidget::setSelection(const std::set<int> &groups) {
   ui.viewTable->clearSelection();
   auto selectionModel = ui.viewTable->selectionModel();
 
-  for (std::__1::__tree_const_iterator<
-           int, std::__1::__tree_node<int, void *> *, long>::value_type group :
-       groups) {
+  for (int group : groups) {
     selectionModel->select(ui.viewTable->model()->index(group, 0),
                            QItemSelectionModel::Select |
                                QItemSelectionModel::Rows);

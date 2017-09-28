@@ -1259,9 +1259,7 @@ IntervalList IntervalList::intersect(const IntervalList &a,
   const std::set<int> aInts = a.getIntSet();
   const std::set<int> bInts = b.getIntSet();
 
-  for (std::__1::__tree_const_iterator<
-           int, std::__1::__tree_node<int, void *> *, long>::value_type aInt :
-       aInts) {
+  for (int aInt : aInts) {
     const bool inIntervalListB = bInts.find(aInt) != bInts.end();
     if (inIntervalListB)
       output.addInterval(aInt);

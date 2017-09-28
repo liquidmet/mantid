@@ -325,9 +325,7 @@ void ReflRunsTabPresenter::transfer() {
         const std::string runNumber = errorRowIt.first; // grab run number
 
         // iterate over rows that are selected in the search table
-        for (std::__1::__tree_const_iterator<
-                 int, std::__1::__tree_node<int, void *> *, long>::value_type
-                 row : selectedRows) {
+        for (auto row : selectedRows) {
           // get the run number from that selected row
           const auto searchRun =
               m_searchModel->data(m_searchModel->index(row, 0))

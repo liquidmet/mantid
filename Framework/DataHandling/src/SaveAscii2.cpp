@@ -268,9 +268,7 @@ void SaveAscii2::exec() {
     }
   } else {
     Progress progress(this, 0.0, 1.0, idx.size());
-    for (std::__1::__tree_const_iterator<
-             int, std::__1::__tree_node<int, void *> *, long>::value_type i :
-         idx) {
+    for (int i : idx) {
       writeSpectrum(i, file);
       progress.report();
     }

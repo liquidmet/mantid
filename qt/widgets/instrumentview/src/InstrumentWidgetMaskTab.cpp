@@ -1130,9 +1130,7 @@ void InstrumentWidgetMaskTab::storeDetectorMask(bool isROI) {
 
     if (!detList.empty()) {
       // try to mask each detector separately and ignore any failure
-      for (std::__1::__tree_const_iterator<int,
-                                           std::__1::__tree_node<int, void *> *,
-                                           long>::value_type det : detList) {
+      for (auto det : detList) {
         try {
           if (isROI && wsFresh) {
             if (wsMask->isMasked(det))
