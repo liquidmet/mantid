@@ -312,10 +312,7 @@ class LiquidsReflectometryReduction(PythonAlgorithm):
             raise RuntimeError("The reflectivity is all zeros: check your peak selection")
 
         # Avoid leaving trash behind
-        for ws in ['ws_event_data', 'normalized_data', 'q_workspace']:
-            if AnalysisDataService.doesExist(ws):
-                AnalysisDataService.remove(ws)
-
+        self.cleanup()
         self.setProperty('OutputWorkspace', mtd[name_output_ws])
 
     def load_data(self):
@@ -522,13 +519,9 @@ class LiquidsReflectometryReduction(PythonAlgorithm):
             data_dict = reduce(_reduce, toks, {})
 
             # Get ordered list of keys
-            keys = []
-            for token in toks:
-                key_value = token.split('=')
-                if len(key_value)==2:
-                    keys.append(key_value[0].strip())
+            keys = self.create_ordered_key_list(toks)
 
-            # Skip empty lines
+            # Skip empty line
             if len(keys)==0:
                 continue
             # Complain if the format is non-standard
@@ -537,9 +530,8 @@ class LiquidsReflectometryReduction(PythonAlgorithm):
                 continue
 
             # Sanity check
-            if keys[0] != 'IncidentMedium' and keys[1] != 'LambdaRequested' \
-                    and keys[2] != 'S1H':
-                logger.error("The scaling factor file isn't standard: bad keywords")
+            self.check_bad_keywords(keys)
+
             # The S2H key has been changing in the earlier version of REFL reduction.
             # Get the key from the data to make sure we are backward compatible.
             s2h_key = keys[3]
@@ -586,6 +578,24 @@ class LiquidsReflectometryReduction(PythonAlgorithm):
         else:
             logger.error("Could not find scaling factor for %s" % str(incident_medium))
         return workspace
+
+    def check_bad_keywords(self, keys):
+        if keys[0] != 'IncidentMedium' and keys[1] != 'LambdaRequested' \
+                and keys[2] != 'S1H':
+            logger.error("The scaling factor file isn't standard: bad keywords")
+
+    def create_ordered_key_list(self, toks):
+        keys = []
+        for token in toks:
+            key_value = token.split('=')
+            if len(key_value)==2:
+                keys.append(key_value[0].strip())
+        return keys
+
+    def cleanup(self):
+        for ws in ['ws_event_data', 'normalized_data', 'q_workspace']:
+            if AnalysisDataService.doesExist(ws):
+                AnalysisDataService.remove(ws)
 
 
 AlgorithmFactory.subscribe(LiquidsReflectometryReduction)
