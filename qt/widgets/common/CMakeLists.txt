@@ -435,20 +435,22 @@ set ( TEST_PY_FILES
 set ( TARGET_LIBRARIES
   ${TCMALLOC_LIBRARIES_LINKTIME}
   ${CORE_MANTIDLIBS}
-  ${QT_LIBRARIES}
-  ${QWT_LIBRARIES}
   ${POCO_LIBRARIES}
   ${Boost_LIBRARIES}
   ${PYTHON_LIBRARIES}
-  ${QSCINTILLA_LIBRARIES}
 )
 if ( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   list ( APPEND TARGET_LIBRARIES "-framework CoreFoundation")
 endif()
 
 ###########################################################################
-# Testing
+# Target
 ###########################################################################
+if (ENABLE_WORKBENCH)
+  find_package ( Qt5 COMPONENTS Network REQUIRED )
+  find_package ( QScintillaQt5 REQUIRED )
+endif ()
+
 mtd_add_qt_library (TARGET_NAME MantidQtWidgetsCommon
   SRC ${SRC_FILES}
   MOC ${MOC_FILES}
@@ -459,11 +461,17 @@ mtd_add_qt_library (TARGET_NAME MantidQtWidgetsCommon
   INCLUDE_DIRS
     inc
     ${PYTHON_INCLUDE_PATH}
-    ${QSCINTILLA_INCLUDE_DIR}
   LINK_LIBS
     ${TARGET_LIBRARIES}
   QT4_LINK_LIBS
-    Qt4::QtHelp Qt4::QtWebKit Qt4::QtNetwork
+    Qt4::QtHelp
+    Qt4::QtWebKit
+    Qt4::QtNetwork
+    Qt4::Qscintilla
+    ${QWT_LIBRARIES}
+  QT5_LINK_LIBS
+    Qt5::Network
+    Qt5::Qscintilla
   OSX_INSTALL_RPATH
     "@loader_path/../MacOS;@loader_path/../Libraries"
 )
