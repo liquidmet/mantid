@@ -30,9 +30,9 @@
 #ifndef PLOT_H
 #define PLOT_H
 
-#include <QObject>
-#include <QMap>
 #include <QLocale>
+#include <QMap>
+#include <QObject>
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -109,6 +109,21 @@ public:
   void reverseCurveOrder(); // Created in connection with waterfall plots.
                             // Called from Graph method of same name.
 
+  void drawInwardTickListXBottom(QPainter *painter, const QwtScaleMap &map,
+                                 QwtValueList const &ticks, int y, int low,
+                                 int high, int tickLength) const;
+
+  void drawInwardTickListXTop(QPainter *painter, const QwtScaleMap &map,
+                              QwtValueList const &ticks, int y, int low,
+                              int high, int tickLength) const;
+
+  void drawInwardTickListYLeft(QPainter *painter, const QwtScaleMap &map,
+                               QwtValueList const &ticks, int x, int low,
+                               int high, int tickLength) const;
+
+  void drawInwardTickListYRight(QPainter *painter, const QwtScaleMap &map,
+                                QwtValueList const &ticks, int x, int low,
+                                int high, int tickLength) const;
 signals:
   void dragMousePress(QPoint);
   void dragMouseRelease(QPoint);

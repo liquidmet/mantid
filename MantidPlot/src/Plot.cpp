@@ -254,6 +254,46 @@ void Plot::drawItems(QPainter *painter, const QRect &rect,
   }
 }
 
+void Plot::drawInwardTickListYLeft(QPainter *painter, const QwtScaleMap &map,
+                                   QwtValueList const &ticks, int x, int low,
+                                   int high, int tickLength) const {
+  for (const auto &tick : ticks) {
+    auto y = map.transform(tick);
+    if (y > low && y < high)
+      QwtPainter::drawLine(painter, x, y, x + tickLength, y);
+  }
+}
+
+void Plot::drawInwardTickListYRight(QPainter *painter, const QwtScaleMap &map,
+                                    QwtValueList const &ticks, int x, int low,
+                                    int high, int tickLength) const {
+  for (const auto &tick : ticks) {
+    auto y = map.transform(tick);
+    if (y > low && y < high)
+      QwtPainter::drawLine(painter, x + 1, y, x - tickLength, y);
+  }
+}
+
+void Plot::drawInwardTickListXBottom(QPainter *painter, const QwtScaleMap &map,
+                                     QwtValueList const &ticks, int y, int low,
+                                     int high, int tickLength) const {
+  for (const auto &tick : ticks) {
+    auto x = map.transform(tick);
+    if (x > low && x < high)
+      QwtPainter::drawLine(painter, x, y + 1, x, y - tickLength);
+  }
+}
+
+void Plot::drawInwardTickListXTop(QPainter *painter, const QwtScaleMap &map,
+                                  QwtValueList const &ticks, int y, int low,
+                                  int high, int tickLength) const {
+  for (const auto &tick : ticks) {
+    auto x = map.transform(tick);
+    if (x > low && x < high)
+      QwtPainter::drawLine(painter, x, y, x, y + tickLength);
+  }
+}
+
 void Plot::drawInwardTicks(QPainter *painter, const QRect &rect,
                            const QwtScaleMap &map, int axis, bool min,
                            bool maj) const {
@@ -268,122 +308,79 @@ void Plot::drawInwardTicks(QPainter *painter, const QRect &rect,
   painter->save();
   painter->setPen(QPen(color, axesLinewidth(), Qt::SolidLine));
 
-  const auto& scDiv = axisScaleDiv(axis);
+  const auto &scDiv = *axisScaleDiv(axis);
   const QwtValueList &minTickList = scDiv.ticks(QwtScaleDiv::MinorTick);
-  auto minTicks = static_cast<int>(minTickList.count());
-
   const QwtValueList &medTickList = scDiv.ticks(QwtScaleDiv::MediumTick);
-  auto medTicks = static_cast<int>(medTickList.count());
-
   const QwtValueList &majTickList = scDiv.ticks(QwtScaleDiv::MajorTick);
-  auto majTicks = static_cast<int>(majTickList.count());
 
   int x, y, low, high;
   switch (axis) {
-  case QwtPlot::yLeft:
+  case QwtPlot::yLeft: {
     x = x1;
     low = y1 + majTickLength;
     high = y2 - majTickLength;
     if (min) {
-      for (const auto& tick : minTickList) {
-        y = map.transform(tick);
-        if (y > low && y < high)
-          QwtPainter::drawLine(painter, x, y, x + minTickLength, y);
-      }
-      for (const auto& tick : medTickList) {
-        y = map.transform(tick);
-        if (y > low && y < high)
-          QwtPainter::drawLine(painter, x, y, x + minTickLength, y);
-      }
+      drawInwardTickListYLeft(painter, map, minTickList, x, low, high,
+                              minTickLength);
+      drawInwardTickListYLeft(painter, map, medTickList, x, low, high,
+                              minTickLength);
     }
-
     if (maj) {
-      for (const auto& tick : majTickList) {
-        y = map.transform(tick);
-        if (y > low && y < high)
-          QwtPainter::drawLine(painter, x, y, x + majTickLength, y);
-      }
+      drawInwardTickListYLeft(painter, map, majTickList, x, low, high,
+                              majTickLength);
     }
-    break;
+  } break;
 
   case QwtPlot::yRight: {
     x = x2;
     low = y1 + majTickLength;
     high = y2 - majTickLength;
     if (min) {
-      for (const auto& tick : minTickList) {
-        y = map.transform(tick);
-        if (y > low && y < high)
-          QwtPainter::drawLine(painter, x + 1, y, x - minTickLength, y);
-      }
-      for (const auto& tick : medTickList) {
-        y = map.transform(tick);
-        if (y > low && y < high)
-          QwtPainter::drawLine(painter, x + 1, y, x - minTickLength, y);
-      }
+      drawInwardTickListYRight(painter, map, minTickList, x, low, high,
+                               minTickLength);
+      drawInwardTickListYRight(painter, map, medTickList, x, low, high,
+                               minTickLength);
     }
-
     if (maj) {
-      for (const auto& tick : majTickList) {
-        y = map.transform(tick);
-        if (y > low && y < high)
-          QwtPainter::drawLine(painter, x + 1, y, x - majTickLength, y);
-      }
+      drawInwardTickListYRight(painter, map, majTickList, x, low, high,
+                               majTickLength);
     }
-} break;
+  } break;
 
-  case QwtPlot::xBottom:
+  case QwtPlot::xBottom: {
     y = y2;
     low = x1 + majTickLength;
     high = x2 - majTickLength;
     if (min) {
-      for (const auto& tick : minTickList) {
-        x = map.transform(tick);
-        if (x > low && x < high)
-          QwtPainter::drawLine(painter, x, y + 1, x, y - minTickLength);
-      }
-      for (const auto& tick : medTickList) {
-        x = map.transform(tick);
-        if (x > low && x < high)
-          QwtPainter::drawLine(painter, x, y + 1, x, y - minTickLength);
-      }
+      drawInwardTickListXBottom(painter, map, minTickList, y, low, high,
+                                minTickLength);
+      drawInwardTickListXBottom(painter, map, medTickList, y, low, high,
+                                minTickLength);
     }
 
     if (maj) {
-      for (const auto& tick : majTickList) {
-        x = map.transform(tick);
-        if (x > low && x < high)
-          QwtPainter::drawLine(painter, x, y + 1, x, y - majTickLength);
-      }
+      drawInwardTickListXBottom(painter, map, majTickList, y, low, high,
+                                majTickLength);
     }
-    break;
+  } break;
 
-  case QwtPlot::xTop:
+  case QwtPlot::xTop: {
     y = y1;
     low = x1 + majTickLength;
     high = x2 - majTickLength;
 
     if (min) {
-      for (const auto& tick : minTickList) {
-        x = map.transform(tick);
-        if (x > low && x < high)
-          QwtPainter::drawLine(painter, x, y, x, y + minTickLength);
-      }
-      for (const auto& tick : medTickList) {
-        x = map.transform(medTickList[j]);
-        if (x > low && x < high)
-          QwtPainter::drawLine(painter, x, y, x, y + minTickLength);
-      }
+      drawInwardTickListXTop(painter, map, minTickList, y, low, high,
+                             minTickLength);
+      drawInwardTickListXTop(painter, map, medTickList, y, low, high,
+                             minTickLength);
     }
 
     if (maj) {
-      for (const auto& tick : majTickList) {
-        x = map.transform(tick);
-        if (x > low && x < high)
-          QwtPainter::drawLine(painter, x, y, x, y + majTickLength);
-      }
+      drawInwardTickListXTop(painter, map, majTickList, y, low, high,
+                             majTickLength);
     }
-    break;
+  } break;
   }
   painter->restore();
 }
