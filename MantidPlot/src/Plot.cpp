@@ -268,15 +268,15 @@ void Plot::drawInwardTicks(QPainter *painter, const QRect &rect,
   painter->save();
   painter->setPen(QPen(color, axesLinewidth(), Qt::SolidLine));
 
-  const QwtScaleDiv *scDiv = (const QwtScaleDiv *)axisScaleDiv(axis);
-  const QwtValueList &minTickList = scDiv->ticks(QwtScaleDiv::MinorTick);
-  int minTicks = static_cast<int>(minTickList.count());
+  const auto& scDiv = axisScaleDiv(axis);
+  const QwtValueList &minTickList = scDiv.ticks(QwtScaleDiv::MinorTick);
+  auto minTicks = static_cast<int>(minTickList.count());
 
-  const QwtValueList &medTickList = scDiv->ticks(QwtScaleDiv::MediumTick);
-  int medTicks = static_cast<int>(medTickList.count());
+  const QwtValueList &medTickList = scDiv.ticks(QwtScaleDiv::MediumTick);
+  auto medTicks = static_cast<int>(medTickList.count());
 
-  const QwtValueList &majTickList = scDiv->ticks(QwtScaleDiv::MajorTick);
-  int majTicks = static_cast<int>(majTickList.count());
+  const QwtValueList &majTickList = scDiv.ticks(QwtScaleDiv::MajorTick);
+  auto majTicks = static_cast<int>(majTickList.count());
 
   int x, y, low, high;
   switch (axis) {
