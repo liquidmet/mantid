@@ -57,8 +57,8 @@ int ValueOnAxis::at() const { return m_atValue; }
 ValueOnAxis atValue(int value) { return ValueOnAxis(value); }
 
 VerticalTickLength::VerticalTickLength(int tickLength, Direction direction)
-    : m_lengthAsYOffset{direction == Direction::UP ? tickLength
-                                                   : -tickLength} {};
+    : m_lengthAsYOffset{direction == Direction::UP ? -tickLength
+                                                   : tickLength} {};
 
 int VerticalTickLength::lengthAsYOffset() const { return m_lengthAsYOffset; }
 
@@ -71,8 +71,8 @@ VerticalTickLength petrudingDownBy(int length) {
 }
 
 HorizontalTickLength::HorizontalTickLength(int tickLength, Direction direction)
-    : m_lengthAsXOffset{direction == Direction::LEFT ? tickLength
-                                                     : -tickLength} {};
+    : m_lengthAsXOffset{direction == Direction::LEFT ? -tickLength
+                                                     : tickLength} {};
 
 int HorizontalTickLength::lengthAsXOffset() const { return m_lengthAsXOffset; }
 

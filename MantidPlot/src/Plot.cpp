@@ -263,10 +263,10 @@ std::pair<int, int> Plot::boundsOncePadded(std::pair<int, int> bounds,
 void Plot::drawInwardTicks(QPainter *painter, const QRect &rect,
                            const QwtScaleMap &map, int axis, bool min,
                            bool maj) const {
-  int x1 = rect.left();
-  int x2 = rect.right();
-  int y1 = rect.top();
-  int y2 = rect.bottom();
+  int left = rect.left();
+  int right = rect.right();
+  int top = rect.top();
+  int bottom = rect.bottom();
 
   QPalette pal = axisWidget(axis)->palette();
   const QColor &color = pal.color(QPalette::Active, QPalette::Foreground);
@@ -282,63 +282,59 @@ void Plot::drawInwardTicks(QPainter *painter, const QRect &rect,
   int x, y, low, high;
   switch (axis) {
   case QwtPlot::yLeft: {
-    x = x1;
-    std::tie(low, high) = boundsOncePadded({y1, y2}, majTickLength);
+    std::tie(low, high) = boundsOncePadded({top, bottom}, majTickLength);
     if (min) {
-      drawInwardTicksList(painter, map, onVerticalAxis(x), minTickList,
+      drawInwardTicksList(painter, map, onVerticalAxis(left), minTickList,
                          petrudingRightBy(minTickLength), low, high);
-      drawInwardTicksList(painter, map, onVerticalAxis(x), medTickList,
+      drawInwardTicksList(painter, map, onVerticalAxis(left), medTickList,
                          petrudingRightBy(minTickLength), low, high);
     }
     if (maj) {
-      drawInwardTicksList(painter, map, onVerticalAxis(x), majTickList,
+      drawInwardTicksList(painter, map, onVerticalAxis(left), majTickList,
                          petrudingRightBy(majTickLength), low, high);
     }
   } break;
 
   case QwtPlot::yRight: {
-    x = x2;
-    std::tie(low, high) = boundsOncePadded({y1, y2}, majTickLength);
+    std::tie(low, high) = boundsOncePadded({top, bottom}, majTickLength);
     if (min) {
-      drawInwardTicksList(painter, map, onVerticalAxis(x), minTickList,
+      drawInwardTicksList(painter, map, onVerticalAxis(right), minTickList,
                          petrudingLeftBy(minTickLength), low, high);
-      drawInwardTicksList(painter, map, onVerticalAxis(x), medTickList,
+      drawInwardTicksList(painter, map, onVerticalAxis(right), medTickList,
                          petrudingLeftBy(minTickLength), low, high);
     }
     if (maj) {
-      drawInwardTicksList(painter, map, onVerticalAxis(x), majTickList,
+      drawInwardTicksList(painter, map, onVerticalAxis(right), majTickList,
                          petrudingLeftBy(majTickLength), low, high);
     }
   } break;
 
   case QwtPlot::xBottom: {
-    y = y2;
-    std::tie(low, high) = boundsOncePadded({x1, x2}, majTickLength);
+    std::tie(low, high) = boundsOncePadded({left, right}, majTickLength);
     if (min) {
-      drawInwardTicksList(painter, map, onHorizontalAxis(y), minTickList,
+      drawInwardTicksList(painter, map, onHorizontalAxis(bottom), minTickList,
                          petrudingUpBy(minTickLength), low, high);
-      drawInwardTicksList(painter, map, onHorizontalAxis(y), medTickList,
+      drawInwardTicksList(painter, map, onHorizontalAxis(bottom), medTickList,
                          petrudingUpBy(minTickLength), low, high);
     }
 
     if (maj) {
-      drawInwardTicksList(painter, map, onHorizontalAxis(y), majTickList,
+      drawInwardTicksList(painter, map, onHorizontalAxis(bottom), majTickList,
                          petrudingUpBy(majTickLength), low, high);
     }
   } break;
 
   case QwtPlot::xTop: {
-    y = y1;
-    std::tie(low, high) = boundsOncePadded({x1, x2}, majTickLength);
+    std::tie(low, high) = boundsOncePadded({left, right}, majTickLength);
     if (min) {
-      drawInwardTicksList(painter, map, onHorizontalAxis(y), minTickList,
+      drawInwardTicksList(painter, map, onHorizontalAxis(top), minTickList,
                          petrudingDownBy(minTickLength), low, high);
-      drawInwardTicksList(painter, map, onHorizontalAxis(y), medTickList,
+      drawInwardTicksList(painter, map, onHorizontalAxis(top), medTickList,
                          petrudingDownBy(minTickLength), low, high);
     }
 
     if (maj) {
-      drawInwardTicksList(painter, map, onHorizontalAxis(y), majTickList,
+      drawInwardTicksList(painter, map, onHorizontalAxis(top), majTickList,
                          petrudingDownBy(majTickLength), low, high);
     }
   } break;
