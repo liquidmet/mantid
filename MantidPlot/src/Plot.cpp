@@ -28,6 +28,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "Plot.h"
+#include "PlotTick.h"
 #include "Graph.h"
 #include "Grid.h"
 #include "LegendWidget.h"
@@ -254,44 +255,9 @@ void Plot::drawItems(QPainter *painter, const QRect &rect,
   }
 }
 
-void Plot::drawInwardTickListYLeft(QPainter *painter, const QwtScaleMap &map,
-                                   QwtValueList const &ticks, int x, int low,
-                                   int high, int tickLength) const {
-  for (const auto &tick : ticks) {
-    auto y = map.transform(tick);
-    if (y > low && y < high)
-      QwtPainter::drawLine(painter, x, y, x + tickLength, y);
-  }
-}
-
-void Plot::drawInwardTickListYRight(QPainter *painter, const QwtScaleMap &map,
-                                    QwtValueList const &ticks, int x, int low,
-                                    int high, int tickLength) const {
-  for (const auto &tick : ticks) {
-    auto y = map.transform(tick);
-    if (y > low && y < high)
-      QwtPainter::drawLine(painter, x + 1, y, x - tickLength, y);
-  }
-}
-
-void Plot::drawInwardTickListXBottom(QPainter *painter, const QwtScaleMap &map,
-                                     QwtValueList const &ticks, int y, int low,
-                                     int high, int tickLength) const {
-  for (const auto &tick : ticks) {
-    auto x = map.transform(tick);
-    if (x > low && x < high)
-      QwtPainter::drawLine(painter, x, y + 1, x, y - tickLength);
-  }
-}
-
-void Plot::drawInwardTickListXTop(QPainter *painter, const QwtScaleMap &map,
-                                  QwtValueList const &ticks, int y, int low,
-                                  int high, int tickLength) const {
-  for (const auto &tick : ticks) {
-    auto x = map.transform(tick);
-    if (x > low && x < high)
-      QwtPainter::drawLine(painter, x, y, x, y + tickLength);
-  }
+std::pair<int, int> Plot::boundsOncePadded(std::pair<int, int> bounds,
+                                           int padding) const {
+  return std::make_pair(bounds.first + padding, bounds.second - padding);
 }
 
 void Plot::drawInwardTicks(QPainter *painter, const QRect &rect,
@@ -317,68 +283,63 @@ void Plot::drawInwardTicks(QPainter *painter, const QRect &rect,
   switch (axis) {
   case QwtPlot::yLeft: {
     x = x1;
-    low = y1 + majTickLength;
-    high = y2 - majTickLength;
+    std::tie(low, high) = boundsOncePadded({y1, y2}, majTickLength);
     if (min) {
-      drawInwardTickListYLeft(painter, map, minTickList, x, low, high,
-                              minTickLength);
-      drawInwardTickListYLeft(painter, map, medTickList, x, low, high,
-                              minTickLength);
+      drawInwardTicksList(painter, map, onVerticalAxis(x), minTickList,
+                         petrudingRightBy(minTickLength), low, high);
+      drawInwardTicksList(painter, map, onVerticalAxis(x), medTickList,
+                         petrudingRightBy(minTickLength), low, high);
     }
     if (maj) {
-      drawInwardTickListYLeft(painter, map, majTickList, x, low, high,
-                              majTickLength);
+      drawInwardTicksList(painter, map, onVerticalAxis(x), majTickList,
+                         petrudingRightBy(majTickLength), low, high);
     }
   } break;
 
   case QwtPlot::yRight: {
     x = x2;
-    low = y1 + majTickLength;
-    high = y2 - majTickLength;
+    std::tie(low, high) = boundsOncePadded({y1, y2}, majTickLength);
     if (min) {
-      drawInwardTickListYRight(painter, map, minTickList, x, low, high,
-                               minTickLength);
-      drawInwardTickListYRight(painter, map, medTickList, x, low, high,
-                               minTickLength);
+      drawInwardTicksList(painter, map, onVerticalAxis(x), minTickList,
+                         petrudingLeftBy(minTickLength), low, high);
+      drawInwardTicksList(painter, map, onVerticalAxis(x), medTickList,
+                         petrudingLeftBy(minTickLength), low, high);
     }
     if (maj) {
-      drawInwardTickListYRight(painter, map, majTickList, x, low, high,
-                               majTickLength);
+      drawInwardTicksList(painter, map, onVerticalAxis(x), majTickList,
+                         petrudingLeftBy(majTickLength), low, high);
     }
   } break;
 
   case QwtPlot::xBottom: {
     y = y2;
-    low = x1 + majTickLength;
-    high = x2 - majTickLength;
+    std::tie(low, high) = boundsOncePadded({x1, x2}, majTickLength);
     if (min) {
-      drawInwardTickListXBottom(painter, map, minTickList, y, low, high,
-                                minTickLength);
-      drawInwardTickListXBottom(painter, map, medTickList, y, low, high,
-                                minTickLength);
+      drawInwardTicksList(painter, map, onHorizontalAxis(y), minTickList,
+                         petrudingUpBy(minTickLength), low, high);
+      drawInwardTicksList(painter, map, onHorizontalAxis(y), medTickList,
+                         petrudingUpBy(minTickLength), low, high);
     }
 
     if (maj) {
-      drawInwardTickListXBottom(painter, map, majTickList, y, low, high,
-                                majTickLength);
+      drawInwardTicksList(painter, map, onHorizontalAxis(y), majTickList,
+                         petrudingUpBy(majTickLength), low, high);
     }
   } break;
 
   case QwtPlot::xTop: {
     y = y1;
-    low = x1 + majTickLength;
-    high = x2 - majTickLength;
-
+    std::tie(low, high) = boundsOncePadded({x1, x2}, majTickLength);
     if (min) {
-      drawInwardTickListXTop(painter, map, minTickList, y, low, high,
-                             minTickLength);
-      drawInwardTickListXTop(painter, map, medTickList, y, low, high,
-                             minTickLength);
+      drawInwardTicksList(painter, map, onHorizontalAxis(y), minTickList,
+                         petrudingDownBy(minTickLength), low, high);
+      drawInwardTicksList(painter, map, onHorizontalAxis(y), medTickList,
+                         petrudingDownBy(minTickLength), low, high);
     }
 
     if (maj) {
-      drawInwardTickListXTop(painter, map, majTickList, y, low, high,
-                             majTickLength);
+      drawInwardTicksList(painter, map, onHorizontalAxis(y), majTickList,
+                         petrudingDownBy(majTickLength), low, high);
     }
   } break;
   }
@@ -390,7 +351,8 @@ void Plot::drawBreak(QPainter *painter, const QRect &rect,
   const ScaleEngine *sc_engine =
       static_cast<const ScaleEngine *>(axisScaleEngine(axis));
   /*const QwtScaleEngine *qwtsc_engine=axisScaleEngine(axis);
-  const ScaleEngine *sc_engine =dynamic_cast<const ScaleEngine*>(qwtsc_engine);
+  const ScaleEngine *sc_engine =dynamic_cast<const
+  ScaleEngine*>(qwtsc_engine);
   if(sc_engine!=NULL)
   {*/
   if (!sc_engine->hasBreak() || !sc_engine->hasBreakDecoration())
@@ -694,7 +656,8 @@ void Plot::updateCurveLabels() {
 }
 
 // Created for waterfall plots.
-// Contains the functionality that's in Graph.cpp of today's qtiplot (where Plot
+// Contains the functionality that's in Graph.cpp of today's qtiplot (where
+// Plot
 // & Graph have been merged)
 void Plot::reverseCurveOrder() {
   if (d_curves.isEmpty())
@@ -718,7 +681,8 @@ void Plot::showEvent(QShowEvent *event) {
 
 /**
   \brief Paint the plot into a given rectangle.
-  Paint the contents of a QwtPlot instance into a given rectangle (Qwt modified
+  Paint the contents of a QwtPlot instance into a given rectangle (Qwt
+  modified
   code).
 
   Note that this method is const so that it properly overrides

@@ -84,6 +84,7 @@ set ( QTIPLOT_SRCS src/ApplicationWindow.cpp
                    src/OpenProjectDialog.cpp
                    src/Plot3DDialog.cpp
                    src/Plot.cpp
+                   src/PlotTick.cpp
                    src/PlotCurve.cpp
                    src/PlotDialog.cpp
                    src/PlotWizard.cpp
@@ -283,6 +284,7 @@ set ( QTIPLOT_HDRS src/ApplicationWindow.h
                    src/PlotCurve.h
                    src/PlotDialog.h
                    src/Plot.h
+                   src/PlotTick.h
                    src/PlotToolInterface.h
                    src/PlotWizard.h
                    src/PluginFit.h

@@ -108,22 +108,7 @@ public:
 
   void reverseCurveOrder(); // Created in connection with waterfall plots.
                             // Called from Graph method of same name.
-
-  void drawInwardTickListXBottom(QPainter *painter, const QwtScaleMap &map,
-                                 QwtValueList const &ticks, int y, int low,
-                                 int high, int tickLength) const;
-
-  void drawInwardTickListXTop(QPainter *painter, const QwtScaleMap &map,
-                              QwtValueList const &ticks, int y, int low,
-                              int high, int tickLength) const;
-
-  void drawInwardTickListYLeft(QPainter *painter, const QwtScaleMap &map,
-                               QwtValueList const &ticks, int x, int low,
-                               int high, int tickLength) const;
-
-  void drawInwardTickListYRight(QPainter *painter, const QwtScaleMap &map,
-                                QwtValueList const &ticks, int x, int low,
-                                int high, int tickLength) const;
+  std::pair<int, int> boundsOncePadded(std::pair<int, int> bounds, int padding) const;
 signals:
   void dragMousePress(QPoint);
   void dragMouseRelease(QPoint);
