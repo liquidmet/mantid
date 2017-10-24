@@ -28,13 +28,13 @@
  *                                                                         *
  ***************************************************************************/
 #include "Plot.h"
-#include "PlotTick.h"
 #include "Graph.h"
 #include "Grid.h"
 #include "LegendWidget.h"
 #include "MantidQtWidgets/Common/ScaleEngine.h"
 #include "MantidQtWidgets/Common/qwt_compat.h"
 #include "PlotCurve.h"
+#include "PlotTick.h"
 #include "ScaleDraw.h"
 #include "Spectrogram.h"
 
@@ -279,64 +279,29 @@ void Plot::drawInwardTicks(QPainter *painter, const QRect &rect,
   const QwtValueList &medTickList = scDiv.ticks(QwtScaleDiv::MediumTick);
   const QwtValueList &majTickList = scDiv.ticks(QwtScaleDiv::MajorTick);
 
+  auto plotTicks = TickPlotter(painter, map, minTickList, medTickList,
+                               majTickList, minTickLength, majTickLength);
+
   switch (axis) {
-  case QwtPlot::yLeft: {
-    auto bounds = boundsOncePadded({top, bottom}, majTickLength);
-    if (min) {
-      drawInwardTicksList(painter, map, onVerticalAxis(left), minTickList,
-                         petrudingRightBy(minTickLength), bounds);
-      drawInwardTicksList(painter, map, onVerticalAxis(left), medTickList,
-                         petrudingRightBy(minTickLength), bounds);
-    }
-    if (maj) {
-      drawInwardTicksList(painter, map, onVerticalAxis(left), majTickList,
-                         petrudingRightBy(majTickLength), bounds);
-    }
-  } break;
+  case QwtPlot::yLeft:
+    plotTicks(onVerticalAxis(left), VerticalTickLength::Direction::RIGHT,
+              boundsOncePadded({top, bottom}, majTickLength));
+    break;
 
-  case QwtPlot::yRight: {
-    auto bounds = boundsOncePadded({top, bottom}, majTickLength);
-    if (min) {
-      drawInwardTicksList(painter, map, onVerticalAxis(right), minTickList,
-                         petrudingLeftBy(minTickLength), bounds);
-      drawInwardTicksList(painter, map, onVerticalAxis(right), medTickList,
-                         petrudingLeftBy(minTickLength), bounds);
-    }
-    if (maj) {
-      drawInwardTicksList(painter, map, onVerticalAxis(right), majTickList,
-                         petrudingLeftBy(majTickLength), bounds);
-    }
-  } break;
+  case QwtPlot::yRight:
+    plotTicks(onVerticalAxis(right), VerticalTickLength::Direction::LEFT,
+              boundsOncePadded({top, bottom}, majTickLength));
+    break;
 
-  case QwtPlot::xBottom: {
-    auto bounds = boundsOncePadded({left, right}, majTickLength);
-    if (min) {
-      drawInwardTicksList(painter, map, onHorizontalAxis(bottom), minTickList,
-                         petrudingUpBy(minTickLength), bounds);
-      drawInwardTicksList(painter, map, onHorizontalAxis(bottom), medTickList,
-                         petrudingUpBy(minTickLength), bounds);
-    }
+  case QwtPlot::xBottom:
+    plotTicks(onHorizontalAxis(bottom), HorizontalTickLength::Direction::LEFT,
+              boundsOncePadded({left, right}, majTickLength));
+    break;
 
-    if (maj) {
-      drawInwardTicksList(painter, map, onHorizontalAxis(bottom), majTickList,
-                         petrudingUpBy(majTickLength), bounds);
-    }
-  } break;
-
-  case QwtPlot::xTop: {
-    auto bounds = boundsOncePadded({left, right}, majTickLength);
-    if (min) {
-      drawInwardTicksList(painter, map, onHorizontalAxis(top), minTickList,
-                         petrudingDownBy(minTickLength), bounds);
-      drawInwardTicksList(painter, map, onHorizontalAxis(top), medTickList,
-                         petrudingDownBy(minTickLength), bounds);
-    }
-
-    if (maj) {
-      drawInwardTicksList(painter, map, onHorizontalAxis(top), majTickList,
-                         petrudingDownBy(majTickLength), bounds);
-    }
-  } break;
+  case QwtPlot::xTop:
+    plotTicks(onHorizontalAxis(top), HorizontalTickLength::Direction::UP,
+              boundsOncePadded({left, right}, majTickLength));
+    break;
   }
   painter->restore();
 }

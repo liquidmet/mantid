@@ -70,16 +70,40 @@ HorizontalTickLength petrudingRightBy(int length);
 
 void drawInwardTicksList(QPainter *painter, const QwtScaleMap &map,
                          VerticalAxis axis, const QwtValueList &ticks,
-                         HorizontalTickLength tickLength, std::pair<int, int> valueBounds);
+                         HorizontalTickLength tickLength,
+                         std::pair<int, int> valueBounds);
 
 void drawInwardTicksList(QPainter *painter, const QwtScaleMap &map,
                          HorizontalAxis axis, const QwtValueList &ticks,
-                         VerticalTickLength tickLength, std::pair<int, int> valueBounds);
+                         VerticalTickLength tickLength,
+                         std::pair<int, int> valueBounds);
 
 void drawInwardTick(QPainter *painter, VerticalAxis axis, ValueOnAxis value,
                     HorizontalTickLength tickLength);
 
 void drawInwardTick(QPainter *painter, HorizontalAxis axis, ValueOnAxis value,
                     VerticalTickLength tickLength);
+
+class TickPlotter {
+public:
+  TickPlotter(QPainter *painter, const QwtScaleMap &scaleMap,
+              int minimumTickLength, int majorTickLength);
+
+  void operator()(HorizontalAxis axis, const QwtValueList &ticks,
+                  VerticalTickLength::Direction tickDirection,
+                  std::pair<int, int> valueBounds);
+
+  void operator()(VerticalAxis axis, const QwtValueList &ticks,
+                  HorizontalTickLength::Direction tickDirection,
+                  std::pair<int, int> valueBounds);
+
+private:
+  QPainter *m_painter;
+  const QwtScaleMap &m_scaleMap;
+  int m_minimumTickLength, m_majorTickLength;
+  QwtValueList const &m_minimumTicks;
+  QwtValueList const &m_mediumTicks;
+  QwtValueList const &m_maximumTicks;
+};
 
 #endif // PLOT_TICK_H

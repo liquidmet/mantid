@@ -13,7 +13,8 @@ void drawInwardTicksList(QPainter *painter, const QwtScaleMap &map,
 
 void drawInwardTicksList(QPainter *painter, const QwtScaleMap &map,
                          HorizontalAxis axis, const QwtValueList &ticks,
-                         VerticalTickLength tickLength, std::pair<int, int> yBounds) {
+                         VerticalTickLength tickLength,
+                         std::pair<int, int> yBounds) {
   for (const auto &tick : ticks) {
     auto y = map.transform(tick);
     if (y > yBounds.first && y < yBounds.second)
@@ -84,3 +85,51 @@ HorizontalTickLength petrudingLeftBy(int length) {
 HorizontalTickLength petrudingRightBy(int length) {
   return HorizontalTickLength(length, HorizontalTickLength::Direction::RIGHT);
 }
+
+TickPlotter::TickPlotter(QPainter *painter, const QwtScaleMap &scaleMap,
+                         QwtValueList const &minimumTicks,
+                         QwtValueList const &mediumTicks,
+                         QwtValueList const &maximumTicks,
+                         int minimumTickLength, int majorTickLength)
+    : m_painter{painter}, m_scaleMap{scaleMap}, m_minimumTicks{minimumTicks},
+      m_mediumTicks{mediumTicks}, m_maximumTicks{maximumTicks},
+      m_minimumTickLength{minimumTickLength}, m_majorTickLength{
+                                                  majorTickLength} {}
+
+void TickPlotter::operator()(HorizontalAxis axis,
+                             VerticalTickLength::Direction tickDirection,
+                             std::pair<int, int> xBounds) {
+  if (m_minimumTickLength != 0) {
+    drawInwardTicksList(m_painter, m_scaleMap, axis, m_minimumTicks,
+                        VerticalTickLength(tickDirection, m_minimumTickLength),
+                        xBounds);
+    drawInwardTicksList(m_painter, m_scaleMap, axis, m_mediumTicks,
+                        VerticalTickLength(tickDirection, m_minimumTickLength),
+                        xBounds);
+  }
+  if (m_majorTickLength != 0) {
+    drawInwardTicksList(m_painter, m_scaleMap, axis, m_majorTicks,
+                        VerticalTickLength(tickDirection, m_majorTickLength),
+                        xBounds);
+  }
+};
+
+void TickPlotter::operator()(VerticalAxis axis,
+                             HorizontalTickLength::Direction tickDirection,
+                             std::pair<int, int> yBounds) {
+  if (m_minimumTickLength != 0) {
+    drawInwardTicksList(
+        m_painter, m_scaleMap, axis, minTickList,
+        HorizontalTickLength(tickDirection, m_minimumTickLength), yBounds);
+    drawInwardTicksList(
+        m_painter, m_scaleMap, axis, ticks,
+        HorizontalTickLength(tickDirection, m_minimumTickLength), yBounds);
+  }
+  if (m_majorTickLength != 0) {
+    drawInwardTicksList(m_painter, m_scaleMap, axis, ticks,
+                        VerticalTickLength(tickDirection, m_majorTickLength),
+                        yBounds);
+  }
+}
+}
+;
