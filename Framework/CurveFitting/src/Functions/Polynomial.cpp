@@ -18,6 +18,11 @@ DECLARE_FUNCTION(Polynomial)
  */
 Polynomial::Polynomial() : m_n(0) {}
 
+void Polynomial::init() {
+  declareParameter("n", 0, "Order of the highest term in polynomial");
+  declareParameter("A0", 0, "Coefficient for the constant term");
+}
+
 /** Evaluate the function at the supplied points
  *  @param out The y-values (output)
  *  @param xValues The points to evaluate at

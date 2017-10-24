@@ -66,6 +66,9 @@ public:
   /// Check if attribute attName exists
   bool hasAttribute(const std::string &attName) const override;
 
+protected:
+  void init() override;
+
 private:
   /// Polynomial order
   int m_n;
