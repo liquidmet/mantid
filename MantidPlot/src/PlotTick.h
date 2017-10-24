@@ -70,11 +70,11 @@ HorizontalTickLength petrudingRightBy(int length);
 
 void drawInwardTicksList(QPainter *painter, const QwtScaleMap &map,
                          VerticalAxis axis, const QwtValueList &ticks,
-                         HorizontalTickLength tickLength, int low, int high);
+                         HorizontalTickLength tickLength, std::pair<int, int> valueBounds);
 
 void drawInwardTicksList(QPainter *painter, const QwtScaleMap &map,
                          HorizontalAxis axis, const QwtValueList &ticks,
-                         VerticalTickLength tickLength, int low, int high);
+                         VerticalTickLength tickLength, std::pair<int, int> valueBounds);
 
 void drawInwardTick(QPainter *painter, VerticalAxis axis, ValueOnAxis value,
                     HorizontalTickLength tickLength);

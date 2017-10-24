@@ -2,20 +2,21 @@
 
 void drawInwardTicksList(QPainter *painter, const QwtScaleMap &map,
                          VerticalAxis axis, const QwtValueList &ticks,
-                         HorizontalTickLength tickLength, int low, int high) {
+                         HorizontalTickLength tickLength,
+                         std::pair<int, int> xBounds) {
   for (const auto &tick : ticks) {
     auto x = map.transform(tick);
-    if (x > low && x < high)
+    if (x > xBounds.first && x < xBounds.second)
       drawInwardTick(painter, axis, atValue(x), tickLength);
   }
 }
 
 void drawInwardTicksList(QPainter *painter, const QwtScaleMap &map,
                          HorizontalAxis axis, const QwtValueList &ticks,
-                         VerticalTickLength tickLength, int low, int high) {
+                         VerticalTickLength tickLength, std::pair<int, int> yBounds) {
   for (const auto &tick : ticks) {
     auto y = map.transform(tick);
-    if (y > low && y < high)
+    if (y > yBounds.first && y < yBounds.second)
       drawInwardTick(painter, axis, atValue(y), tickLength);
   }
 }
